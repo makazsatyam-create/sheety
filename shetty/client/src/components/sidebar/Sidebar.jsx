@@ -102,31 +102,18 @@ function Sidebar({ setSidebarOpen }) {
     },
 
     { id: 10, label: "My Transaction", icon: FiList, path: "/my_transaction" },
-    {
-      id: 11,
-      label: "Stake Settings",
-      icon: FiSettings,
-      path: "/stake_settings",
-    },
-    { id: 12, label: "Game Rules", icon: FiBookOpen },
+
     { id: 18, label: "Deposit", icon: FiCreditCard, path: "/deposit" },
     { id: 19, label: "Withdraw", icon: FiCreditCard, path: "/withdraw" },
     { id: 13, label: "My Profile", icon: FiUser, path: "/my_profile" },
-
-    { id: 15, label: "Language : EN", icon: FiGlobe, arrow: true },
   ];
 
-  const securityLogout = [
-    { id: 1, label: "Security Settings", icon: MdOutlinePolicy },
-    { id: 2, label: "Logout", icon: IoLogOut },
-  ];
+  const securityLogout = [{ id: 2, label: "Logout", icon: IoLogOut }];
 
   return (
     <nav className="h-full w-full flex flex-col bg-[#fff] ">
       <div className="icon-bg-colour flex justify-center items-center h-12">
-        <div className="text-xl font-bold text-white">
-          shetty777.online
-        </div>
+        <div className="text-xl font-bold text-white">shetty777.online</div>
         <CgCloseO
           className="absolute right-4 top-3 w-7 h-7 text-white md:hidden"
           onClick={() => setSidebarOpen(false)}
@@ -161,7 +148,11 @@ function Sidebar({ setSidebarOpen }) {
               >
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center overflow-hidden shrink-0">
                   {item.image ? (
-                    <img src={sabaImg} alt="Saba" className="w-full h-full object-cover" />
+                    <img
+                      src={sabaImg}
+                      alt="Saba"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span className="text-[10px] font-[700] text-white">
                       {item.label.charAt(0)}
