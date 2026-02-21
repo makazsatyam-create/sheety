@@ -9,7 +9,9 @@ import "./Casino.css";
 import { useNavigate } from "react-router-dom";
 
 // jili.json can be nested array; flatten if needed
-const JiliGames = Array.isArray(JiliGamesRaw?.[0]) ? JiliGamesRaw.flat() : JiliGamesRaw || [];
+const JiliGames = Array.isArray(JiliGamesRaw?.[0])
+  ? JiliGamesRaw.flat()
+  : JiliGamesRaw || [];
 
 function Casino() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,13 +23,24 @@ function Casino() {
     return EvolutionGames.filter((game) => game.provider === "evolutionlive");
   }, []);
 
-  const gamesByProvider = useMemo(() => ({
-    spribe: (SpribeGames || []).filter((g) => (g.provider || "").toLowerCase() === "spribe"),
-    jili: (JiliGames || []).filter((g) => (g.provider || "").toLowerCase() === "jili"),
-    inout: (InoutGames || []).filter((g) => (g.provider || "").toLowerCase() === "inout"),
-    evolution: evolutionGames,
-    ezugi: (EzugiGames || []).filter((g) => (g.provider || "").toLowerCase() === "ezugi"),
-  }), [evolutionGames]);
+  const gamesByProvider = useMemo(
+    () => ({
+      spribe: (SpribeGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "spribe"
+      ),
+      jili: (JiliGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "jili"
+      ),
+      inout: (InoutGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "inout"
+      ),
+      evolution: evolutionGames,
+      ezugi: (EzugiGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "ezugi"
+      ),
+    }),
+    [evolutionGames]
+  );
 
   const currentGames = useMemo(() => {
     return gamesByProvider[selectedProvider] || [];
@@ -49,19 +62,40 @@ function Casino() {
     const types = new Set();
     currentGames.forEach((game) => {
       const name = (game.game_name || "").toLowerCase();
-      if (name.includes("32 cards") || name.includes("32card")) types.add("32 Cards");
+      if (name.includes("32 cards") || name.includes("32card"))
+        types.add("32 Cards");
       else if (name.includes("baccarat")) types.add("Baccarat");
       else if (name.includes("blackjack")) types.add("Blackjack");
       else if (name.includes("dragon tiger")) types.add("Dragon Tiger");
       else if (name.includes("roulette")) types.add("Roulette");
-      else if (name.includes("sic bo") || name.includes("sicbo")) types.add("Sicbo");
+      else if (name.includes("sic bo") || name.includes("sicbo"))
+        types.add("Sicbo");
       else if (name.includes("teen patti")) types.add("Teen Patti");
       else if (name.includes("poker")) types.add("Poker");
-      else if (name.includes("crazy") || name.includes("funky") || name.includes("mega") || name.includes("dream") || name.includes("fun")) types.add("Fun");
+      else if (
+        name.includes("crazy") ||
+        name.includes("funky") ||
+        name.includes("mega") ||
+        name.includes("dream") ||
+        name.includes("fun")
+      )
+        types.add("Fun");
     });
-    const typeOrder = ["32 Cards", "Baccarat", "Blackjack", "Dragon Tiger", "Fun", "Poker", "Roulette", "Sicbo", "Teen Patti"];
+    const typeOrder = [
+      "32 Cards",
+      "Baccarat",
+      "Blackjack",
+      "Dragon Tiger",
+      "Fun",
+      "Poker",
+      "Roulette",
+      "Sicbo",
+      "Teen Patti",
+    ];
     const ordered = ["ALL"];
-    typeOrder.forEach((t) => { if (types.has(t)) ordered.push(t); });
+    typeOrder.forEach((t) => {
+      if (types.has(t)) ordered.push(t);
+    });
     return ordered;
   }, [selectedProvider, currentGames]);
 
@@ -73,34 +107,50 @@ function Casino() {
         filtered = filtered.filter((game) => {
           const name = (game.game_name || "").toLowerCase();
           if (selectedGameType === "Baccarat") return name.includes("baccarat");
-          if (selectedGameType === "Blackjack") return name.includes("blackjack");
+          if (selectedGameType === "Blackjack")
+            return name.includes("blackjack");
           if (selectedGameType === "Roulette") return name.includes("roulette");
           if (selectedGameType === "Poker") return name.includes("poker");
-          if (selectedGameType === "Dragon Tiger") return name.includes("dragon tiger");
-          if (selectedGameType === "Sicbo") return name.includes("sic bo") || name.includes("sicbo");
-          if (selectedGameType === "Teen Patti") return name.includes("teen patti");
-          if (selectedGameType === "32 Cards") return name.includes("32 cards") || name.includes("32card");
-          if (selectedGameType === "Fun") return name.includes("crazy") || name.includes("funky") || name.includes("mega") || name.includes("dream") || name.includes("fun");
+          if (selectedGameType === "Dragon Tiger")
+            return name.includes("dragon tiger");
+          if (selectedGameType === "Sicbo")
+            return name.includes("sic bo") || name.includes("sicbo");
+          if (selectedGameType === "Teen Patti")
+            return name.includes("teen patti");
+          if (selectedGameType === "32 Cards")
+            return name.includes("32 cards") || name.includes("32card");
+          if (selectedGameType === "Fun")
+            return (
+              name.includes("crazy") ||
+              name.includes("funky") ||
+              name.includes("mega") ||
+              name.includes("dream") ||
+              name.includes("fun")
+            );
           return true;
         });
       } else {
-        filtered = filtered.filter((game) => (game.game_type || "").trim() === selectedGameType);
+        filtered = filtered.filter(
+          (game) => (game.game_type || "").trim() === selectedGameType
+        );
       }
     }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      filtered = filtered.filter((game) => (game.game_name || "").toLowerCase().includes(q));
+      filtered = filtered.filter((game) =>
+        (game.game_name || "").toLowerCase().includes(q)
+      );
     }
     return filtered;
   }, [currentGames, selectedGameType, selectedProvider, searchQuery]);
 
   const providers = [
+    { id: "evolution", name: "EVOLUTION" },
+    { id: "ezugi", name: "EZUGI" },
     { id: "spribe", name: "SPRIBE" },
     { id: "jili", name: "JILI" },
     { id: "inout", name: "INOUT" },
-    { id: "evolution", name: "EVOLUTION" },
-    { id: "ezugi", name: "EZUGI" },
   ];
 
   return (
