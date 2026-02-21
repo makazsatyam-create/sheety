@@ -7,10 +7,8 @@ import { useSelector } from "react-redux";
 
 const menuitems = [
   { name: "Home", link: "/home" },
-  { name: "Inplay", link: "/inplay" },
-  { name: "Sportsbook", link: "" },
+
   { name: "Casino", link: "/casino" },
-  { name: "MultiMarkets", link: "/multimarkets" },
 ];
 
 function Header({ onMenuClick, sidebarOpen }) {

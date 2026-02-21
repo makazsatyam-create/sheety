@@ -42,65 +42,10 @@ function Sidebar({ setSidebarOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { matches: cricketMatchesFromRedux, loader: cricketLoader } =
-    useSelector((state) => state.cricket);
-  const { soccerData: footballListFromRedux, soccerLoading: footballLoader } =
-    useSelector((state) => state.soccer);
-  const { data: tennisListFromRedux, tennisLoading: tennisLoader } =
-    useSelector((state) => state.tennis);
+
   const userInfo = useSelector((state) => state.auth?.userInfo);
   const displayName = userInfo?.name || userInfo?.userName || "User";
   const avatarLetter = (displayName.charAt(0) || "U").toUpperCase();
-
-  const cricketList = cricketMatchesFromRedux || [];
-  const cricketTitles = [
-    ...new Set(cricketList.map((m) => m.title).filter(Boolean)),
-  ];
-
-  const footballList = footballListFromRedux || [];
-  const footballTitles = [
-    ...new Set(
-      footballList
-        .map((m) => m.title ?? m.league ?? m.tournament ?? m.match)
-        .filter(Boolean)
-    ),
-  ];
-
-  const tennisList = tennisListFromRedux || [];
-  const tennisTitles = [
-    ...new Set(tennisList.map((m) => m.title ?? m.cname).filter(Boolean)),
-  ];
-
-  useEffect(() => {
-    if (openSport === "Cricket" && cricketList.length === 0) {
-      dispatch(fetchCricketData());
-    }
-  }, [openSport, cricketList.length, dispatch]);
-
-  useEffect(() => {
-    if (openSport === "Football" && footballList.length === 0) {
-      dispatch(fetchSoccerData());
-    }
-  }, [openSport, footballList.length, dispatch]);
-
-  useEffect(() => {
-    if (openSport === "Tennis" && tennisList.length === 0) {
-      dispatch(fetchTennisData());
-    }
-  }, [openSport, tennisList.length, dispatch]);
-  const sports = [
-    { id: 2, name: "Cricket", emoji: "🏏" },
-    { id: 3, name: "Football", emoji: "⚽" },
-    { id: 4, name: "Tennis", emoji: "🎾" },
-    { id: 5, name: "Kabaddi", emoji: "🤼" },
-    { id: 6, name: "Basketball", emoji: "🏀" },
-    { id: 7, name: "Baseball", emoji: "⚾" },
-    { id: 8, name: "GreyHound", emoji: "🐕" },
-    { id: 9, name: "Horse Race", emoji: "🏇" },
-    { id: 10, name: "Volleyball", emoji: "🏐" },
-    { id: 11, name: "Darts", emoji: "🎯" },
-    { id: 12, name: "Futsal", emoji: "⚽" },
-  ];
 
   const cricketLeagues = [
     "International Twenty20 Matches",
@@ -120,7 +65,6 @@ function Sidebar({ setSidebarOpen }) {
   ];
 
   const otherMenu = [
-    { id: 1, label: "Promotions", icon: FiGift },
     { id: 2, label: "My Bets", icon: FiBriefcase, path: "/my_bets" },
     { id: 3, label: "My Wallet", icon: FiCreditCard, path: "/my_wallet" },
 
@@ -142,12 +86,7 @@ function Sidebar({ setSidebarOpen }) {
       icon: FiFileText,
       path: "/account_statement",
     },
-    {
-      id: 8,
-      label: "Bonus Statement",
-      icon: FiAward,
-      path: "/bonus_statement",
-    },
+
     {
       id: 9,
       label: "Deposit Turnover",
@@ -195,154 +134,8 @@ function Sidebar({ setSidebarOpen }) {
           <div className="text-[14px] font-[700] truncate">{displayName}</div>
         </div>
 
-        {sports.map((sport) => {
-          const isOpen = openSport === sport.name;
-          const isCricket = sport.name === "Cricket";
-          const isFootball = sport.name === "Football";
-          const isTennis = sport.name === "Tennis";
-          const hasRoute = isCricket || isFootball || isTennis;
-          const isActive =
-            (isCricket && location.pathname === "/cricket") ||
-            (isFootball && location.pathname === "/football") ||
-            (isTennis && location.pathname === "/tennis");
-
-          return (
-            <div key={sport.id} className="w-full">
-              <button
-                onClick={() => {
-                  if (hasRoute) {
-                    setOpenSport(isOpen ? null : sport.name);
-                    if (isCricket) {
-                      navigate("/cricket");
-                      if (cricketList.length === 0)
-                        dispatch(fetchCricketData());
-                    } else if (isFootball) {
-                      navigate("/football");
-                      if (footballList.length === 0)
-                        dispatch(fetchSoccerData());
-                    } else if (isTennis) {
-                      navigate("/tennis");
-                      if (tennisList.length === 0) dispatch(fetchTennisData());
-                    } else {
-                      setSidebarOpen(false);
-                    }
-                  } else {
-                    setOpenSport(isOpen ? null : sport.name);
-                  }
-                }}
-                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${isActive ? "activetab-bg" : ""}`}
-              >
-                <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center text-lg">
-                  {sport.emoji}
-                </div>
-                <span className="text-sm font-[500] text-gray-800">
-                  {sport.name}
-                </span>
-              </button>
-
-              {isCricket && isOpen && (
-                <div className="w-full border-l-2 border-[#f1dcfe] py-2 mb-2">
-                  {cricketLoader && cricketList.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      Loading...
-                    </span>
-                  ) : cricketTitles.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      No titles
-                    </span>
-                  ) : (
-                    cricketTitles.map((titleName) => (
-                      <div
-                        key={titleName}
-                        className="w-full border-b border-[#f1dcfe]"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            dispatch(setSelectedTitle(titleName));
-                            navigate("/cricket");
-                            setSidebarOpen(false);
-                          }}
-                          className="sidebar-title-item w-full text-left px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-100 transition whitespace-normal"
-                        >
-                          {titleName}
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-
-              {isFootball && isOpen && (
-                <div className="w-full border-l-2 border-[#f1dcfe] py-2 mb-2">
-                  {footballLoader && footballList.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      Loading...
-                    </span>
-                  ) : footballTitles.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      No titles
-                    </span>
-                  ) : (
-                    footballTitles.map((titleName) => (
-                      <div
-                        key={titleName}
-                        className="w-full border-b border-[#f1dcfe]"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            dispatch(setSelectedSoccerTitle(titleName));
-                            navigate("/football");
-                            setSidebarOpen(false);
-                          }}
-                          className="sidebar-title-item w-full text-left px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-100 transition whitespace-normal"
-                        >
-                          {titleName}
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-              {isTennis && isOpen && (
-                <div className="w-full border-l-2 border-[#f1dcfe] py-2 mb-2">
-                  {tennisLoader && tennisList.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      Loading...
-                    </span>
-                  ) : tennisTitles.length === 0 ? (
-                    <span className="text-[13px] text-gray-500 block px-4">
-                      No titles
-                    </span>
-                  ) : (
-                    tennisTitles.map((titleName) => (
-                      <div
-                        key={titleName}
-                        className="w-full border-b border-[#f1dcfe]"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            dispatch(setSelectedTennisTitle(titleName));
-                            navigate("/tennis");
-                            setSidebarOpen(false);
-                          }}
-                          className="sidebar-title-item w-full text-left px-4 py-2 text-[13px] text-gray-700 hover:bg-gray-100 transition whitespace-normal"
-                        >
-                          {titleName}
-                        </button>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-
         <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span className="text-xs">OTHER MENU</span>
+          <span className="text-xs">MENU ITEMS</span>
         </button>
         <div className="">
           {otherMenu.map((item) => {
