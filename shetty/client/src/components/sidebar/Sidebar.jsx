@@ -22,26 +22,14 @@ import { MdOutlinePolicy } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchCricketData,
-  setSelectedTitle,
-} from "../../redux/reducer/cricketSlice";
-import {
-  fetchSoccerData,
-  setSelectedTitle as setSelectedSoccerTitle,
-} from "../../redux/reducer/soccerSlice";
-import {
-  fetchTennisData,
-  setSelectedTitle as setSelectedTennisTitle,
-} from "../../redux/reducer/tennisSlice";
-import { useEffect } from "react";
-import cricketball from "../../assets/cricketball.png";
 import sabaImg from "../../assets/saba.jpg";
+import luckyImg from "../../assets/luckysports.png";
+import btiImg from "../../assets/bti.png";
 
 const sportsMenu = [
-  { id: "saba", label: "Saba", path: "/saba", image: true },
-  { id: "lucky", label: "Lucky", path: "/lucky" },
-  { id: "bti", label: "BTI", path: "/bti" },
+  { id: "saba", label: "Saba", path: "/saba", image: sabaImg },
+  { id: "lucky", label: "Lucky", path: "/lucky", image: luckyImg },
+  { id: "bti", label: "BTI", path: "/bti", image: btiImg },
 ];
 
 function Sidebar({ setSidebarOpen }) {
@@ -53,23 +41,6 @@ function Sidebar({ setSidebarOpen }) {
   const userInfo = useSelector((state) => state.auth?.userInfo);
   const displayName = userInfo?.name || userInfo?.userName || "User";
   const avatarLetter = (displayName.charAt(0) || "U").toUpperCase();
-
-  const cricketLeagues = [
-    "International Twenty20 Matches",
-    "Ford Trophy",
-    "Pakistan / Presidents Trophy",
-    "Simulated Reality League / Big Bash League SRL",
-    "Simulated Reality League / Pakistan Super League SRL",
-    "Simulated Reality League / Premier League SRL",
-    "Australia NCL Women",
-    "Simulated Reality League / Caribbean Premier League SRL",
-    "World Legends Pro League T20",
-    "ICC Men's T20 World Cup",
-    "Simulated Reality League / Super Smash SRL",
-    "Simulated Reality League / SA T20 League SRL",
-    "Other",
-    "ICC World Cup Warm Up Matches",
-  ];
 
   const otherMenu = [
     { id: 2, label: "My Bets", icon: FiBriefcase, path: "/my_bets" },
@@ -129,7 +100,12 @@ function Sidebar({ setSidebarOpen }) {
         </div>
 
         <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span className="text-xs">SPORTS</span>
+          <span
+            className="text-xs font-bold text-black"
+            style={{ fontWeight: 700 }}
+          >
+            SPORTS
+          </span>
         </button>
         <div className="">
           {sportsMenu.map((item) => {
@@ -144,13 +120,15 @@ function Sidebar({ setSidebarOpen }) {
                     setSidebarOpen?.(false);
                   }
                 }}
-                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${isActive ? "activetab-bg" : ""}`}
+                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${
+                  isActive ? "activetab-bg" : ""
+                }`}
               >
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center overflow-hidden shrink-0">
                   {item.image ? (
                     <img
-                      src={sabaImg}
-                      alt="Saba"
+                      src={item.image} // use the actual image from the array
+                      alt={item.label}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -168,7 +146,12 @@ function Sidebar({ setSidebarOpen }) {
         </div>
 
         <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span className="text-xs">MENU ITEMS</span>
+          <span
+            className="text-xs font-bold text-black"
+            style={{ fontWeight: 700 }}
+          >
+            MENU ITEMS
+          </span>
         </button>
         <div className="">
           {otherMenu.map((item) => {
@@ -199,7 +182,12 @@ function Sidebar({ setSidebarOpen }) {
         </div>
 
         <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span className="text-xs">SECURITY & LOGOUT</span>
+          <span
+            className="text-xs font-bold text-black"
+            style={{ fontWeight: 700 }}
+          >
+            SECURITY & LOGOUT
+          </span>
         </button>
         <div className="">
           {securityLogout.map((item) => {
