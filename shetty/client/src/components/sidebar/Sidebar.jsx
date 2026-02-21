@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import title from "../../assets/title.svg";
 import { CgCloseO } from "react-icons/cg";
 import { RiWhatsappFill } from "react-icons/ri";
 import {
@@ -117,8 +116,8 @@ function Sidebar({ setSidebarOpen }) {
   return (
     <nav className="h-full w-full flex flex-col bg-[#fff] ">
       <div className="icon-bg-colour flex justify-center items-center h-12">
-        <div className="text-2xl font-bold">
-          <img src={title} alt="Logo" className="h-7" />
+        <div className="text-xl font-bold text-white">
+          shetty777.online
         </div>
         <CgCloseO
           className="absolute right-4 top-3 w-7 h-7 text-white md:hidden"
