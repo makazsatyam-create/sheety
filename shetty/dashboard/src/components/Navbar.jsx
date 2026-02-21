@@ -11,7 +11,6 @@ import {
   changePasswordBySubAdmin,
 } from "../redux/reducer/authReducer";
 import { toast } from "react-toastify";
-import logo from "../assets/title.png";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -182,7 +181,7 @@ const Navbar = () => {
       >
         {/* Desktop Header */}
         <header className="bg-color hidden border-b border-gray-800 lg:flex lg:h-14 lg:w-full lg:items-center lg:justify-between lg:px-4 xl:px-6">
-          <img src={logo} alt="Winadda" className="h-10" />
+          <span className="text-xl font-bold text-white">shetty777</span>
           <div className="flex items-center gap-3">
             <p
               className="rounded-sm bg-[#292929] px-1.5 text-[10px] text-white uppercase"

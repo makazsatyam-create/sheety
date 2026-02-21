@@ -52,8 +52,8 @@ function Login() {
   };
 
   const handleDemoLogin = () => {
-    const demoUsername = "demo1";
-    const demoPassword = "123456";
+    const demoUsername = "demo";
+    const demoPassword = "demo1234";
 
     // Optional: show credentials in input fields
     setUsername(demoUsername);
@@ -99,7 +99,9 @@ function Login() {
           paddingTop: "20px",
         }}
       >
-        <span style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}>
+        <span
+          style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}
+        >
           shetty777.online
         </span>
       </Box>

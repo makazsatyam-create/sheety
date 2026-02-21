@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { FaUser, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
-import logo from '../assets/title.png';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getAdmin, loginAdmin } from '../redux/reducer/authReducer';
 import { toast } from 'react-toastify';
@@ -52,7 +50,9 @@ const Login = () => {
         }}
       >
         <div className='mx-auto w-[90%] md:w-[220px]'>
-          <img src={logo} className='mx-auto h-[70px]' alt='Winadda' />
+          <span className='mx-auto block text-center text-2xl font-bold text-white'>
+            shetty777
+          </span>
           <div className='relative mt-1'>
             <input
               type='text'
