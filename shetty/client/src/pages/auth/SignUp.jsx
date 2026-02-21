@@ -13,7 +13,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import titleImg from "../../assets/title.svg";
 import api from "../../redux/api";
 
 const vars = {
@@ -147,17 +146,9 @@ function SignUp() {
           paddingBottom: "12px",
         }}
       >
-        <Box
-          className="logo"
-          sx={{
-            maxWidth: "130px",
-            minHeight: "34px",
-            marginBottom: "10px",
-            "& img": { maxWidth: "100%", border: 0 },
-          }}
-        >
-          <img src={titleImg} alt="WINADDA" />
-        </Box>
+        <span style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}>
+          shetty777.online
+        </span>
       </Box>
 
       <Box

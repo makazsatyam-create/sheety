@@ -17,8 +17,6 @@ import AndroidIcon from "@mui/icons-material/Android";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { loginUser } from "../../redux/reducer/authReducer";
-import titleImg from "../../assets/title.png";
-
 // CSS variables mapping
 const vars = {
   loginBackground: "#090909",
@@ -101,16 +99,9 @@ function Login() {
           paddingTop: "20px",
         }}
       >
-        <Box
-          className="logo"
-          sx={{
-            maxWidth: "130px",
-            minHeight: "34px",
-          }}
-        >
-          {" "}
-          <img src={titleImg} alt="WINADDA" />
-        </Box>
+        <span style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}>
+          shetty777.online
+        </span>
       </Box>
 
       {/* 2nd: .login-card - sits below logo in flow */}

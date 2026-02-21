@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
 import EvolutionGames from "../../data/Evolution.json";
-import JDBGames from "../../data/jdb.json";
 import SpribeGames from "../../data/spribe.json";
-import SmartSoftGames from "../../data/smartsoft.json";
 import JiliGamesRaw from "../../data/jili.json";
+import InoutGames from "../../data/inout.json";
 import EzugiGames from "../../data/EZUGI.json";
 import "./Casino.css";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +14,7 @@ const JiliGames = Array.isArray(JiliGamesRaw?.[0]) ? JiliGamesRaw.flat() : JiliG
 function Casino() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGameType, setSelectedGameType] = useState("ALL");
-  const [selectedProvider, setSelectedProvider] = useState("evolution");
+  const [selectedProvider, setSelectedProvider] = useState("spribe");
   const navigate = useNavigate();
 
   const evolutionGames = useMemo(() => {
@@ -23,11 +22,10 @@ function Casino() {
   }, []);
 
   const gamesByProvider = useMemo(() => ({
-    evolution: evolutionGames,
-    jili: (JiliGames || []).filter((g) => (g.provider || "").toLowerCase() === "jili"),
     spribe: (SpribeGames || []).filter((g) => (g.provider || "").toLowerCase() === "spribe"),
-    jdb: (JDBGames || []).filter((g) => (g.provider || "").toLowerCase() === "jdb"),
-    smartsoft: (SmartSoftGames || []).map((g) => ({ ...g, provider: g.provider || "smartsoft" })),
+    jili: (JiliGames || []).filter((g) => (g.provider || "").toLowerCase() === "jili"),
+    inout: (InoutGames || []).filter((g) => (g.provider || "").toLowerCase() === "inout"),
+    evolution: evolutionGames,
     ezugi: (EzugiGames || []).filter((g) => (g.provider || "").toLowerCase() === "ezugi"),
   }), [evolutionGames]);
 
@@ -98,11 +96,10 @@ function Casino() {
   }, [currentGames, selectedGameType, selectedProvider, searchQuery]);
 
   const providers = [
-    { id: "evolution", name: "EVOLUTION" },
-    { id: "jili", name: "JILI" },
     { id: "spribe", name: "SPRIBE" },
-    { id: "jdb", name: "JDB" },
-    { id: "smartsoft", name: "SMARTSOFT" },
+    { id: "jili", name: "JILI" },
+    { id: "inout", name: "INOUT" },
+    { id: "evolution", name: "EVOLUTION" },
     { id: "ezugi", name: "EZUGI" },
   ];
 

@@ -15,7 +15,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import titleImg from "../../assets/title.svg";
 import api from "../../redux/api";
 
 const vars = {
@@ -157,18 +156,9 @@ function ForgotPassword() {
         }}
         onClick={() => navigate("/login")}
       >
-        <Box
-          className="logo"
-          sx={{
-            maxWidth: "130px",
-            minHeight: "34px",
-            marginBottom: "10px",
-            textAlign: "center",
-            "& img": { maxWidth: "100%", border: 0 },
-          }}
-        >
-          <img src={titleImg} alt="WINADDA" />
-        </Box>
+        <span style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}>
+          shetty777.online
+        </span>
       </Box>
 
       {/* Form card */}
