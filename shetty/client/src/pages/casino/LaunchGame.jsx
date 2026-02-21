@@ -130,16 +130,18 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { startCasinoGame } from "../../services/casinoService";
 import { getUser } from "../../redux/reducer/authReducer";
 import { wsService } from "../../services/WebsocketService";
 import EvolutionData from "../../data/Evolution.json";
-import JDBData from "../../data/jdb.json";
 import SpribeData from "../../data/spribe.json";
-import SmartSoftData from "../../data/smartsoft.json";
 import JiliDataRaw from "../../data/jili.json";
+import InoutData from "../../data/inout.json";
 import EzugiData from "../../data/EZUGI.json";
+import SabaData from "../../data/saba.json";
+import LuckyData from "../../data/lucky.json";
+import BtiData from "../../data/bti.json";
 
 const JiliData = Array.isArray(JiliDataRaw?.[0]) ? JiliDataRaw.flat() : JiliDataRaw || [];
 
@@ -149,6 +151,8 @@ function LaunchGame() {
   const { userInfo, loading: authLoading } = useSelector((state) => state.auth);
   const userId = userInfo?._id ?? userInfo?.id;
   const { gameuid } = useParams();
+  const [searchParams] = useSearchParams();
+  const gameTypeFromQuery = searchParams.get("gameType") || "";
   const [gameUrl, setGameUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -210,14 +214,16 @@ function LaunchGame() {
       isInitializingRef.current = true;
 
       try {
-        // Find the game from all provider JSON data (Evolution, Jili, Spribe, JDB, Smartsoft)
+        // Find the game from all provider JSON data (casino + sports: Saba, Lucky, BTI)
         const allGames = [
           ...(EvolutionData || []),
           ...(JiliData || []),
           ...(SpribeData || []),
-          ...(JDBData || []),
-          ...(SmartSoftData || []),
+          ...(InoutData || []),
           ...(EzugiData || []),
+          ...(SabaData || []),
+          ...(LuckyData || []),
+          ...(BtiData || []),
         ];
         const game = allGames.find((g) => g.game_uid === gameuid);
 
@@ -228,14 +234,14 @@ function LaunchGame() {
           return;
         }
 
-        // Use user's available balance as credit amount (or you can set a default)
         const creditAmount = userInfo.avbalance || 0;
+        const gameType = game.game_type || gameTypeFromQuery || "";
 
-        // Call the API to get the game URL
         const response = await startCasinoGame(
           userInfo.userName,
           gameuid,
-          creditAmount
+          creditAmount,
+          gameType
         );
 
         if (response && response.success && response.gameUrl) {

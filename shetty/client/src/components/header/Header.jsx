@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 const menuitems = [
   { name: "Home", link: "/home" },
-
   { name: "Casino", link: "/casino" },
 ];
 

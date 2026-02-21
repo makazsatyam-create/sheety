@@ -10,7 +10,7 @@ const SERVER_URL = process.env.CASINO_API_URL;
 // 🎮 1. Start Casino Game
 export const startCasinoGame = async (req, res) => {
   try {
-    const { userName, game_uid, credit_amount } = req.body;
+    const { userName, game_uid, credit_amount, gameType } = req.body;
 
     // ✅ Validate required fields
     if (!userName || !game_uid || !credit_amount) {
@@ -52,14 +52,15 @@ export const startCasinoGame = async (req, res) => {
 
     const timestamp = Math.round(Date.now());
 
-    // 🔧 Create payload exactly like PHP code
+    // 🔧 Create payload (gameType optional for Saba/Lucky/BTI sports)
     const requestData = {
-      user_id: userName, // Using userName as user_id
+      user_id: userName,
       wallet_amount: parseFloat(credit_amount),
       game_uid: game_uid,
       token: API_TOKEN,
       timestamp: timestamp,
     };
+    if (gameType != null && gameType !== "") requestData.game_type = gameType;
 
     console.log("🔹 Request data:", requestData);
 
@@ -67,8 +68,8 @@ export const startCasinoGame = async (req, res) => {
     const message = JSON.stringify(requestData);
     const encryptedPayload = encrypt(message); // This uses your existing encrypt function
 
-    // 🔧 Build URL with parameters (like PHP code)
-    const gameUrl =
+    // 🔧 Build URL with parameters (game_type optional for Saba/Lucky/BTI)
+    let gameUrl =
       `${SERVER_URL}/launch_game?` +
       `user_id=${encodeURIComponent(userName)}` +
       `&wallet_amount=${encodeURIComponent(credit_amount)}` +
@@ -76,6 +77,9 @@ export const startCasinoGame = async (req, res) => {
       `&token=${encodeURIComponent(API_TOKEN)}` +
       `&timestamp=${encodeURIComponent(timestamp)}` +
       `&payload=${encodeURIComponent(encryptedPayload)}`;
+    if (gameType != null && gameType !== "") {
+      gameUrl += `&game_type=${encodeURIComponent(gameType)}`;
+    }
 
     console.log("🔹 Generated game URL:", gameUrl);
 

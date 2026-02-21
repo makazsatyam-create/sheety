@@ -36,6 +36,14 @@ import {
 } from "../../redux/reducer/tennisSlice";
 import { useEffect } from "react";
 import cricketball from "../../assets/cricketball.png";
+import sabaImg from "../../assets/saba.jpg";
+
+const sportsMenu = [
+  { id: "saba", label: "Saba", path: "/saba", image: true },
+  { id: "lucky", label: "Lucky", path: "/lucky" },
+  { id: "bti", label: "BTI", path: "/bti" },
+];
+
 function Sidebar({ setSidebarOpen }) {
   const [openSport, setOpenSport] = useState(null);
   const navigate = useNavigate();
@@ -131,6 +139,41 @@ function Sidebar({ setSidebarOpen }) {
             {avatarLetter}
           </div>
           <div className="text-[14px] font-[700] truncate">{displayName}</div>
+        </div>
+
+        <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
+          <span className="text-xs">SPORTS</span>
+        </button>
+        <div className="">
+          {sportsMenu.map((item) => {
+            const isActive = item.path && location.pathname === item.path;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  if (item.path) {
+                    navigate(item.path);
+                    setSidebarOpen?.(false);
+                  }
+                }}
+                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${isActive ? "activetab-bg" : ""}`}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center overflow-hidden shrink-0">
+                  {item.image ? (
+                    <img src={sabaImg} alt="Saba" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[10px] font-[700] text-white">
+                      {item.label.charAt(0)}
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs font-[500] text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
