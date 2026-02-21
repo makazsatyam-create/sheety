@@ -5,6 +5,10 @@ import SpribeGames from "../../data/spribe.json";
 import JiliGamesRaw from "../../data/jili.json";
 import InoutGames from "../../data/inout.json";
 import EzugiGames from "../../data/EZUGI.json";
+import CQ9Games from "../../data/CQ9.json";
+import pgGames from "../../data/PG.json";
+import smartSoftGames from "../../data/smartsoft.json";
+import JDBGames from "../../data/JDB.json";
 import "./Casino.css";
 import { useNavigate } from "react-router-dom";
 
@@ -37,6 +41,18 @@ function Casino() {
       evolution: evolutionGames,
       ezugi: (EzugiGames || []).filter(
         (g) => (g.provider || "").toLowerCase() === "ezugi"
+      ),
+      cq9: (CQ9Games || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "cq9"
+      ),
+      pg: (pgGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "pgsoft"
+      ),
+      smartsoft: (smartSoftGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "smartsoft"
+      ),
+      jdb: (JDBGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "jdb"
       ),
     }),
     [evolutionGames]
@@ -148,9 +164,14 @@ function Casino() {
   const providers = [
     { id: "evolution", name: "EVOLUTION" },
     { id: "ezugi", name: "EZUGI" },
+    { id: "smartsoft", name: "SMARTSOFT" },
     { id: "spribe", name: "SPRIBE" },
     { id: "jili", name: "JILI" },
     { id: "inout", name: "INOUT" },
+    { id: "cq9", name: "CQ9" },
+    { id: "pg", name: "PG" },
+
+    { id: "jdb", name: "JDB" },
   ];
 
   return (

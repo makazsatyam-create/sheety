@@ -142,6 +142,10 @@ import EzugiData from "../../data/EZUGI.json";
 import SabaData from "../../data/saba.json";
 import LuckyData from "../../data/lucky.json";
 import BtiData from "../../data/bti.json";
+import CQ9Data from "../../data/CQ9.json";
+import PGData from "../../data/PG.json";
+import SmartsoftData from "../../data/smartsoft.json";
+import JDBData from "../../data/JDB.json";
 
 const JiliData = Array.isArray(JiliDataRaw?.[0]) ? JiliDataRaw.flat() : JiliDataRaw || [];
 
@@ -224,6 +228,10 @@ function LaunchGame() {
           ...(SabaData || []),
           ...(LuckyData || []),
           ...(BtiData || []),
+          ...(CQ9Data || []),
+          ...(PGData || []),
+          ...(SmartsoftData || []),
+          ...(JDBData || []),
         ];
         const game = allGames.find((g) => g.game_uid === gameuid);
 
