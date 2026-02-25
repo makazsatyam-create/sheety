@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchCricketData } from "../../redux/reducer/cricketSlice";
-import { fetchSoccerData } from "../../redux/reducer/soccerSlice";
-import { fetchTennisData } from "../../redux/reducer/tennisSlice";
+
 import DepositIcon from "../../assets/depositIcon.svg";
 import WithdrawIcon from "../../assets/withdrawIcon.svg";
 import Banner1 from "../../assets/banner1.webp";
@@ -18,21 +16,6 @@ import FooterInfo from "../../components/home/FooterInfo";
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { matches: cricketMatches = [] } = useSelector(
-    (state) => state.cricket
-  );
-  const { soccerData: soccerMatches = [] } = useSelector(
-    (state) => state.soccer
-  );
-  const { data: tennisMatches = [] } = useSelector(
-    (state) => state.tennis
-  );
-
-  useEffect(() => {
-    if (!(cricketMatches?.length > 0)) dispatch(fetchCricketData());
-    if (!(soccerMatches?.length > 0)) dispatch(fetchSoccerData());
-    if (!(tennisMatches?.length > 0)) dispatch(fetchTennisData());
-  }, [dispatch, cricketMatches?.length, soccerMatches?.length, tennisMatches?.length]);
 
   return (
     <div className="py-2 px-4">

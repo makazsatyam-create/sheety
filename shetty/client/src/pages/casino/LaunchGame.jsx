@@ -1,133 +1,3 @@
-// import React, { useState, useEffect } from 'react'
-// import { useSelector, useDispatch } from 'react-redux'
-// import { useParams } from 'react-router-dom';
-// import { startCasinoGame } from '../services/casinoService';
-// import { getUser } from '../redux/reducer/authReducer';
-// import EvolutionData from '../components/api_json/Evolution.json';
-// import EzugiData from '../components/api_json/ezugi.json';
-// import SpribeData from '../components/api_json/spribe.json';
-
-// function LaunchGame() {
-//   const dispatch = useDispatch();
-
-//   const { userInfo, loading: authLoading } = useSelector((state) => state.auth);
-//   const { gameuid } = useParams();
-//   const [gameUrl, setGameUrl] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const launchGame = async () => {
-//       // Wait for auth to finish loading
-//       if (authLoading) {
-//         return;
-//       }
-
-//       // If userInfo exists but doesn't have userName, fetch full user data
-//       if (userInfo && !userInfo.userName) {
-//         try {
-//           await dispatch(getUser()).unwrap();
-//           // After getUser completes, the component will re-render with updated userInfo
-//           // and this effect will run again with the complete userInfo
-//           return;
-//         } catch (err) {
-//           setError('Failed to load user information');
-//           setLoading(false);
-//           return;
-//         }
-//       }
-
-//       // Check if userInfo exists and has required properties
-//       if (!userInfo || !userInfo.userName || !gameuid) {
-//         setError('User information or game ID is missing');
-//         setLoading(false);
-//         return;
-//       }
-
-//       try {
-//         // Find the game from the JSON data to get full game info
-//         const allGames = [...EvolutionData, ...EzugiData, ...SpribeData];
-//         const game = allGames.find(g => g.game_uid === gameuid);
-
-//         if (!game) {
-//           setError('Game not found');
-//           setLoading(false);
-//           return;
-//         }
-
-//         // Use user's available balance as credit amount (or you can set a default)
-//         const creditAmount = userInfo.avbalance || 0;
-
-//         // Call the API to get the game URL
-//         const response = await startCasinoGame(
-//           userInfo.userName,
-//           gameuid,
-//           creditAmount
-//         );
-
-//         if (response && response.success && response.gameUrl) {
-//           setGameUrl(response.gameUrl);
-//           // window.location.href = response.gameUrl;
-//         } else {
-//           setError(response?.message || 'Failed to launch game');
-//         }
-//       } catch (err) {
-//         console.error('Error launching game:', err);
-//         setError(err.response?.data?.message || 'Failed to launch game. Please try again.');
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     launchGame();
-//   }, [userInfo, gameuid, authLoading, dispatch]);
-
-//   if (loading) {
-//     return (
-//       <div className='flex items-center justify-center h-screen'>
-//         <div className='text-center'>
-//           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4'></div>
-//           <p className='text-lg'>Loading game...</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <div className='flex items-center justify-center h-screen'>
-//         <div className='text-center bg-red-50 p-6 rounded-lg'>
-//           <p className='text-red-600 text-lg font-semibold mb-2'>Error</p>
-//           <p className='text-red-500'>{error}</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   if (!gameUrl) {
-//     return (
-//       <div className='flex items-center justify-center h-screen'>
-//         <div className='text-center'>
-//           <p className='text-lg'>No game URL available</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className='w-full h-screen'>
-//       <iframe
-//         src={gameUrl}
-//         className='w-full h-full border-0'
-//         title='Casino Game'
-//         allowFullScreen
-//       />
-//     </div>
-//   );
-// }
-
-// export default LaunchGame
-
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -146,8 +16,11 @@ import CQ9Data from "../../data/CQ9.json";
 import PGData from "../../data/PG.json";
 import SmartsoftData from "../../data/smartsoft.json";
 import JDBData from "../../data/JDB.json";
-
-const JiliData = Array.isArray(JiliDataRaw?.[0]) ? JiliDataRaw.flat() : JiliDataRaw || [];
+import GalaxsysDataRaw from "../../data/galaxsys.json";
+const GalaxsysData = Array.isArray(GalaxsysDataRaw) ? GalaxsysDataRaw : [];
+const JiliData = Array.isArray(JiliDataRaw?.[0])
+  ? JiliDataRaw.flat()
+  : JiliDataRaw || [];
 
 function LaunchGame() {
   const dispatch = useDispatch();
@@ -232,10 +105,14 @@ function LaunchGame() {
           ...(PGData || []),
           ...(SmartsoftData || []),
           ...(JDBData || []),
+          ...GalaxsysData,
         ];
-        const game = allGames.find((g) => g.game_uid === gameuid);
+        const uid = (gameuid || "").trim();
+        const game = allGames.find(
+          (g) => (g.game_uid || "").toString().trim() === uid
+        );
 
-        if (!game) {
+        if (!game && !uid) {
           setError("Game not found");
           setLoading(false);
           isInitializingRef.current = false;
@@ -243,7 +120,9 @@ function LaunchGame() {
         }
 
         const creditAmount = userInfo.avbalance || 0;
-        const gameType = game.game_type || gameTypeFromQuery || "";
+        const gameType = game
+          ? game.game_type || gameTypeFromQuery || ""
+          : gameTypeFromQuery || "";
 
         const response = await startCasinoGame(
           userInfo.userName,

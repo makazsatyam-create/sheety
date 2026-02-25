@@ -7,8 +7,10 @@ import InoutGames from "../../data/inout.json";
 import EzugiGames from "../../data/EZUGI.json";
 import CQ9Games from "../../data/CQ9.json";
 import pgGames from "../../data/PG.json";
-import smartSoftGames from "../../data/smartsoft.json";
+import SmartsoftGames from "../../data/smartsoft.json";
 import JDBGames from "../../data/JDB.json";
+import GalaxsysGames from "../../data/galaxsys.json";
+import towerRushIcon from "../../assets/image.png";
 import "./Casino.css";
 import { useNavigate } from "react-router-dom";
 
@@ -48,11 +50,15 @@ function Casino() {
       pg: (pgGames || []).filter(
         (g) => (g.provider || "").toLowerCase() === "pgsoft"
       ),
-      smartsoft: (smartSoftGames || []).filter(
-        (g) => (g.provider || "").toLowerCase() === "smartsoft"
-      ),
+      smartsoft: (SmartsoftGames || []).map((g) => ({
+        ...g,
+        provider: g.provider || "smartsoft",
+      })),
       jdb: (JDBGames || []).filter(
         (g) => (g.provider || "").toLowerCase() === "jdb"
+      ),
+      galaxy: (GalaxsysGames || []).filter(
+        (g) => (g.provider || "").toLowerCase() === "galaxsys"
       ),
     }),
     [evolutionGames]
@@ -172,6 +178,7 @@ function Casino() {
     { id: "pg", name: "PG" },
 
     { id: "jdb", name: "JDB" },
+    { id: "galaxy", name: "Galaxy" },
   ];
 
   return (
@@ -311,7 +318,7 @@ function Casino() {
                 style={{ cursor: "pointer" }}
               >
                 <img
-                  src={game.icon}
+                  src={(game.provider || "").toLowerCase() === "galaxsys" ? towerRushIcon : game.icon}
                   alt={game.game_name}
                   className="casino-game-image"
                   onError={(e) => {
