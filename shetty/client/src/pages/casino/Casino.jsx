@@ -253,11 +253,8 @@ function Casino() {
         </div>
       </div>
 
-      {/* Provider Tabs - Using casino-provider-block */}
-      <div
-        className="flex-row provider-ctn scrollbar-hide"
-        style={{ borderRadius: "8px", overflow: "hidden" }}
-      >
+      {/* Provider Tabs */}
+      <div className="flex-row provider-ctn" style={{ borderRadius: "8px" }}>
         {providers.map((provider) => (
           <div
             key={provider.id}
@@ -272,11 +269,8 @@ function Casino() {
         ))}
       </div>
 
-      {/* Game Type Filters - Using casino-category-card */}
-      <div
-        className="flex-row scrollbar-hide"
-        style={{ gap: "8px", padding: "4px 0" }}
-      >
+      {/* Game Type Filters */}
+      <div className="casino-type-row">
         {gameTypes.map((type) => (
           <div
             key={type}
