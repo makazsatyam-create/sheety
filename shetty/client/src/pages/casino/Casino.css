@@ -103,6 +103,97 @@
   100% { background-color: rgba(255, 255, 0, 0.1); }
 }
 
+/* ── Casino Header Bar ── */
+.casino-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 38px;
+  background-color: #071123;
+  border-radius: 25px;
+  border: 1px solid #04a0e2;
+  padding: 0 6px 0 10px;
+}
+
+.casino-header-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.casino-search-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid #01fafe;
+  border-radius: 100px;
+  padding: 0 28px 0 26px;
+  height: 28px;
+  width: 160px;
+}
+
+.casino-search-icon {
+  position: absolute;
+  left: 8px;
+  color: #9ca3af;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.casino-search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 12px;
+  min-width: 0;
+}
+
+.casino-search-input::placeholder {
+  color: #6b7280;
+}
+
+.casino-search-clear {
+  position: absolute;
+  right: 7px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0;
+  line-height: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .casino-header-bar {
+    height: 36px;
+    padding: 0 4px 0 8px;
+    border-radius: 20px;
+  }
+
+  .casino-header-title {
+    font-size: 12px;
+  }
+
+  .casino-search-wrapper {
+    width: 140px;
+    height: 26px;
+  }
+
+  .casino-search-input {
+    font-size: 11px;
+  }
+}
+
 .casino-filter-text {
   font-size: 13px;
   font-weight: 600;

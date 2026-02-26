@@ -184,68 +184,22 @@ function Casino() {
   return (
     <div className="casino-container">
       {/* Header with CASINO title and Search */}
-      <div
-        className="flex-row"
-        style={{
-          justifyContent: "space-between",
-          height: "32px",
-          backgroundColor: "#071123",
-          borderRadius: "25px",
-          border: "1px solid #04a0e2",
-        }}
-      >
-        <h1
-          className="casino-filter-text"
-          style={{
-            fontSize: "13px",
-            color: "#fff",
-            fontWeight: "900",
-            marginLeft: "5px",
-          }}
-        >
-          CASINO
-        </h1>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            position: "relative",
-            borderRadius: "100px",
-            marginRight: "2px",
-            border: "1px solid #01fafe",
-          }}
-        >
+            {/* Header: CASINO title + Search */}
+      <div className="casino-header-bar">
+        <h1 className="casino-header-title">CASINO</h1>
+        <div className="casino-search-wrapper">
+          <FiSearch className="casino-search-icon" />
           <input
             type="text"
-            placeholder="Search games"
+            placeholder="Search games..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              padding: "4px 30px 4px 28px", // space for both icons
-              color: "#fff",
-              borderRadius: "40px",
-              border: "1px solid rgba(1, 250, 254, 0.5)",
-              outline: "none",
-              fontSize: "13px",
-              background: "transparent",
-            }}
+            className="casino-search-input"
           />
-
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              style={{
-                position: "absolute",
-                right: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                color: "#9CA3AF",
-              }}
+              className="casino-search-clear"
             >
               <FiX />
             </button>
