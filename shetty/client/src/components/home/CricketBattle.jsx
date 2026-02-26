@@ -1,6 +1,8 @@
 import React from "react";
-import CricketBattleimg from "../../assets/cricket_battle.webp";
+import CricketBattleImg from "../../assets/cricketBattle.png";
+import { useNavigate } from "react-router-dom";
 function CricketBattle() {
+  const navigate = useNavigate();
   return (
     <div>
       <div>
@@ -13,7 +15,8 @@ function CricketBattle() {
         </div>
         <div>
           <img
-            src={CricketBattleimg}
+            src={CricketBattleImg}
+            onClick={() => navigate("/inplay")}
             alt="Cricket Battle"
             className="w-full mt-2 cursor-pointer"
           />
