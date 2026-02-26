@@ -18,13 +18,15 @@ import {
   FiShield,
   FiGlobe,
 } from "react-icons/fi";
-import { MdOutlinePolicy } from "react-icons/md";
+
 import { IoLogOut } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import sabaImg from "../../assets/saba.jpg";
 import luckyImg from "../../assets/luckysports.png";
 import btiImg from "../../assets/bti.png";
+import DesktopImg from "../../assets/desktopLogo.png";
+import MobileImg from "../../assets/MobileLogo.png";
 
 const sportsMenu = [
   { id: "saba", label: "Saba", path: "/saba", image: sabaImg },
@@ -84,7 +86,18 @@ function Sidebar({ setSidebarOpen }) {
   return (
     <nav className="h-full w-full flex flex-col bg-[#fff] ">
       <div className="icon-bg-colour flex justify-center items-center h-12">
-        <div className="text-xl font-bold text-white">shetty777.online</div>
+        <>
+          <img
+            src={DesktopImg}
+            alt="Logo"
+            className="hidden lg:block h-8 object-contain"
+          />
+          <img
+            src={MobileImg}
+            alt="Logo"
+            className="block lg:hidden h-8 object-contain"
+          />
+        </>
         <CgCloseO
           className="absolute right-4 top-3 w-7 h-7 text-white md:hidden"
           onClick={() => setSidebarOpen(false)}
