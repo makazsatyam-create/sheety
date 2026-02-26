@@ -28,8 +28,13 @@ function BottomNav() {
   //   }
   // }
   const navItems = [
-    { id: 1, name: "Sportsbook", icon: <BiSolidCricketBall />, path: "" },
-    { id: 2, name: "In-play", icon: <FaRegCirclePlay />, path: "/inplay" },
+    {
+      id: 1,
+      name: "Sportsbook",
+      icon: <BiSolidCricketBall />,
+      path: "/inplay",
+    },
+
     { id: 3, name: "Home", icon: <BiSolidHome />, path: "/" },
     { id: 4, name: "Casino", icon: <GiRoundShield />, path: "/casino" },
     {
