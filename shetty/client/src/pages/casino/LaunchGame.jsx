@@ -13,9 +13,9 @@ import SabaData from "../../data/saba.json";
 import LuckyData from "../../data/lucky.json";
 import BtiData from "../../data/bti.json";
 import CQ9Data from "../../data/CQ9.json";
-import PGData from "../../data/PG.json";
+import PGData from "../../data/pg.json";
 import SmartsoftData from "../../data/smartsoft.json";
-import JDBData from "../../data/JDB.json";
+import JDBData from "../../data/jdb.json";
 import GalaxsysDataRaw from "../../data/galaxsys.json";
 const GalaxsysData = Array.isArray(GalaxsysDataRaw) ? GalaxsysDataRaw : [];
 const JiliData = Array.isArray(JiliDataRaw?.[0])

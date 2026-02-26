@@ -6,9 +6,9 @@ import JiliGamesRaw from "../../data/jili.json";
 import InoutGames from "../../data/inout.json";
 import EzugiGames from "../../data/EZUGI.json";
 import CQ9Games from "../../data/CQ9.json";
-import pgGames from "../../data/PG.json";
+import pgGames from "../../data/pg.json";
 import SmartsoftGames from "../../data/smartsoft.json";
-import JDBGames from "../../data/JDB.json";
+import JDBGames from "../../data/jdb.json";
 import GalaxsysGames from "../../data/galaxsys.json";
 import towerRushIcon from "../../assets/image.png";
 import "./Casino.css";
@@ -184,7 +184,7 @@ function Casino() {
   return (
     <div className="casino-container">
       {/* Header with CASINO title and Search */}
-            {/* Header: CASINO title + Search */}
+      {/* Header: CASINO title + Search */}
       <div className="casino-header-bar">
         <h1 className="casino-header-title">CASINO</h1>
         <div className="casino-search-wrapper">
@@ -266,7 +266,11 @@ function Casino() {
                 style={{ cursor: "pointer" }}
               >
                 <img
-                  src={(game.provider || "").toLowerCase() === "galaxsys" ? towerRushIcon : game.icon}
+                  src={
+                    (game.provider || "").toLowerCase() === "galaxsys"
+                      ? towerRushIcon
+                      : game.icon
+                  }
                   alt={game.game_name}
                   className="casino-game-image"
                   onError={(e) => {
