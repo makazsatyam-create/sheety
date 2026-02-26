@@ -10,6 +10,7 @@ import {
   InputAdornment,
   Link,
 } from "@mui/material";
+import desktopLogo from "../../assets/desktopLogo.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -99,11 +100,7 @@ function Login() {
           paddingTop: "20px",
         }}
       >
-        <span
-          style={{ fontSize: "22px", fontWeight: "bold", color: "#04a0e2" }}
-        >
-          shetty777.online
-        </span>
+       <img src={desktopLogo} alt="shetty777.online" style={{ height: "60px", width: "auto", objectFit: "contain" }} />
       </Box>
 
       {/* 2nd: .login-card - sits below logo in flow */}
