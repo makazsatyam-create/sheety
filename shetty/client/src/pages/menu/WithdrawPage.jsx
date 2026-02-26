@@ -54,7 +54,8 @@ const WithdrawPage = () => {
       const response = await api.post("/send-withdrawal-otp");
       if (response.data && response.data.message) {
         toast.success(response.data.message);
-        if (otpCooldownIntervalRef.current) clearInterval(otpCooldownIntervalRef.current);
+        if (otpCooldownIntervalRef.current)
+          clearInterval(otpCooldownIntervalRef.current);
         setOtpCooldown(60); // 60 second cooldown
         otpCooldownIntervalRef.current = setInterval(() => {
           setOtpCooldown((prev) => {
@@ -77,12 +78,7 @@ const WithdrawPage = () => {
   };
 
   const handleAddBank = async () => {
-    if (
-      !accountNumber ||
-      !accountHolderName ||
-      !bankName ||
-      !ifscCode
-    ) {
+    if (!accountNumber || !accountHolderName || !bankName || !ifscCode) {
       toast.error("Please fill all required account details");
       return;
     }
@@ -102,7 +98,7 @@ const WithdrawPage = () => {
     setSubmitting(true);
     try {
       const optionStr = `option${selectedOption}`;
-      
+
       const withdrawalData = {
         amount: parseFloat(withdrawalAmount),
         paymentType: "bank",
@@ -119,16 +115,23 @@ const WithdrawPage = () => {
       const response = await api.post("/withdrawal-request", withdrawalData);
 
       if (response.data.success) {
-        toast.success("Withdrawal request submitted successfully! It will be processed after admin approval.");
+        toast.success(
+          "Withdrawal request submitted successfully! It will be processed after admin approval."
+        );
         resetBankForm();
         setWithdrawalAmount("");
         dispatch(getUser()); // Refresh user balance
       } else {
-        toast.error(response.data.message || "Failed to submit withdrawal request");
+        toast.error(
+          response.data.message || "Failed to submit withdrawal request"
+        );
       }
     } catch (error) {
       console.error("Error submitting withdrawal request:", error);
-      toast.error(error.response?.data?.message || "Failed to submit withdrawal request. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit withdrawal request. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -170,16 +173,23 @@ const WithdrawPage = () => {
       const response = await api.post("/withdrawal-request", withdrawalData);
 
       if (response.data.success) {
-        toast.success("Withdrawal request submitted successfully! It will be processed after admin approval.");
+        toast.success(
+          "Withdrawal request submitted successfully! It will be processed after admin approval."
+        );
         resetCryptoForm();
         setWithdrawalAmount("");
         dispatch(getUser()); // Refresh user balance
       } else {
-        toast.error(response.data.message || "Failed to submit withdrawal request");
+        toast.error(
+          response.data.message || "Failed to submit withdrawal request"
+        );
       }
     } catch (error) {
       console.error("Error submitting withdrawal request:", error);
-      toast.error(error.response?.data?.message || "Failed to submit withdrawal request. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit withdrawal request. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -219,7 +229,9 @@ const WithdrawPage = () => {
           className="withdraw-form-input"
           placeholder="Enter amount to withdraw"
           value={withdrawalAmount}
-          onChange={(e) => setWithdrawalAmount(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) =>
+            setWithdrawalAmount(e.target.value.replace(/\D/g, ""))
+          }
         />
         <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "4px" }}>
           Available Balance: ₹{cashableAmount}
@@ -299,9 +311,16 @@ const WithdrawPage = () => {
             className="withdraw-send-otp-btn"
             onClick={handleSendOtp}
             disabled={sendingOtp || otpCooldown > 0}
-            style={{ opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1, cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer" }}
+            style={{
+              opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1,
+              cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer",
+            }}
           >
-            {sendingOtp ? "Sending..." : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : "Send OTP"}
+            {sendingOtp
+              ? "Sending..."
+              : otpCooldown > 0
+                ? `Resend in ${otpCooldown}s`
+                : "Send OTP"}
           </button>
         </div>
       </div>
@@ -312,7 +331,10 @@ const WithdrawPage = () => {
           className="withdraw-add-btn"
           onClick={handleAddBank}
           disabled={submitting}
-          style={{ opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+          style={{
+            opacity: submitting ? 0.6 : 1,
+            cursor: submitting ? "not-allowed" : "pointer",
+          }}
         >
           {submitting ? "Submitting..." : "SUBMIT WITHDRAWAL REQUEST"}
         </button>
@@ -338,7 +360,9 @@ const WithdrawPage = () => {
           className="withdraw-form-input"
           placeholder="Enter amount to withdraw"
           value={withdrawalAmount}
-          onChange={(e) => setWithdrawalAmount(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) =>
+            setWithdrawalAmount(e.target.value.replace(/\D/g, ""))
+          }
         />
         <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "4px" }}>
           Available Balance: ₹{cashableAmount}
@@ -390,9 +414,16 @@ const WithdrawPage = () => {
             className="withdraw-send-otp-btn"
             onClick={handleSendOtp}
             disabled={sendingOtp || otpCooldown > 0}
-            style={{ opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1, cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer" }}
+            style={{
+              opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1,
+              cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer",
+            }}
           >
-            {sendingOtp ? "Sending..." : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : "Send OTP"}
+            {sendingOtp
+              ? "Sending..."
+              : otpCooldown > 0
+                ? `Resend in ${otpCooldown}s`
+                : "Send OTP"}
           </button>
         </div>
       </div>
@@ -403,7 +434,10 @@ const WithdrawPage = () => {
           className="withdraw-add-btn"
           onClick={handleAddWallet}
           disabled={submitting}
-          style={{ opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+          style={{
+            opacity: submitting ? 0.6 : 1,
+            cursor: submitting ? "not-allowed" : "pointer",
+          }}
         >
           {submitting ? "Submitting..." : "SUBMIT WITHDRAWAL REQUEST"}
         </button>

@@ -10,7 +10,7 @@ const DepositPage = () => {
   const [imageName, setImageName] = useState("");
   const [imageBase64, setImageBase64] = useState("");
   const [step, setStep] = useState(1); // Step 1: Amount Entry, Step 2: Details Entry
-  const [selectedPaymentType, setSelectedPaymentType] = useState("bank"); // bank, upi, crypto, whatsapp
+  const [selectedPaymentType, setSelectedPaymentType] = useState("bank"); // bank, upi, crypto
   const [selectedOption, setSelectedOption] = useState(1); // 1, 2, 3
   const [selectedBonus, setSelectedBonus] = useState("ftd500"); // bonus type
   const [accounts, setAccounts] = useState({
@@ -21,47 +21,31 @@ const DepositPage = () => {
   const [loadingAccounts, setLoadingAccounts] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch accounts based on payment type and option
+  // Fetch accounts based on payment type and option (bank, upi, crypto only)
   useEffect(() => {
-    const fetchAccounts = async () => {
-      if (selectedPaymentType === "whatsapp") return; // Skip for whatsapp
+    setLoadingAccounts(true);
+    const optionStr = `option${selectedOption}`;
+    const type =
+      selectedPaymentType === "bank"
+        ? "bank"
+        : selectedPaymentType === "upi"
+          ? "upi"
+          : "crypto";
 
-      setLoadingAccounts(true);
-      try {
-        const optionStr = `option${selectedOption}`;
-        const type = selectedPaymentType === "bank" ? "bank" : selectedPaymentType === "upi" ? "upi" : "crypto";
-        
-        const response = await api.get("/account/public/list", {
-          params: {
-            type: type,
-            option: optionStr,
-          },
-        });
-
+    api
+      .get("/account/public/list", { params: { type, option: optionStr } })
+      .then((response) => {
         if (response.data.success && response.data.data.length > 0) {
-          const account = response.data.data[0]; // Get first matching account
-          setAccounts((prev) => ({
-            ...prev,
-            [type]: account,
-          }));
+          setAccounts((prev) => ({ ...prev, [type]: response.data.data[0] }));
         } else {
-          setAccounts((prev) => ({
-            ...prev,
-            [type]: null,
-          }));
+          setAccounts((prev) => ({ ...prev, [type]: null }));
         }
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error("Error fetching accounts:", error);
-        setAccounts((prev) => ({
-          ...prev,
-          [selectedPaymentType]: null,
-        }));
-      } finally {
-        setLoadingAccounts(false);
-      }
-    };
-
-    fetchAccounts();
+        setAccounts((prev) => ({ ...prev, [selectedPaymentType]: null }));
+      })
+      .finally(() => setLoadingAccounts(false));
   }, [selectedPaymentType, selectedOption]);
 
   const handlePresetClick = (value) => {
@@ -77,7 +61,7 @@ const DepositPage = () => {
     if (file) {
       setSelectedImage(file);
       setImageName(file.name);
-      
+
       // Convert image to base64
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -114,13 +98,14 @@ const DepositPage = () => {
     setSubmitting(true);
     try {
       const optionStr = `option${selectedOption}`;
-      
+
       const depositData = {
         amount: parseFloat(amount),
         paymentType: selectedPaymentType,
         option: optionStr,
         referenceId: referenceId.trim() || undefined,
-        paymentMethod: selectedPaymentType === "bank" ? selectedMethod : undefined,
+        paymentMethod:
+          selectedPaymentType === "bank" ? selectedMethod : undefined,
         bonusType: selectedBonus,
         image: imageBase64 || undefined,
         remark: `Deposit via ${selectedPaymentType.toUpperCase()} - ${optionStr}`,
@@ -129,8 +114,10 @@ const DepositPage = () => {
       const response = await api.post("/deposit-request", depositData);
 
       if (response.data.success) {
-        toast.success("Deposit request submitted successfully! It will be processed after admin approval.");
-        
+        toast.success(
+          "Deposit request submitted successfully! It will be processed after admin approval."
+        );
+
         // Reset form
         setAmount("");
         setReferenceId("");
@@ -143,11 +130,16 @@ const DepositPage = () => {
         setSelectedBonus("ftd500");
         setSelectedMethod("IMPS");
       } else {
-        toast.error(response.data.message || "Failed to submit deposit request");
+        toast.error(
+          response.data.message || "Failed to submit deposit request"
+        );
       }
     } catch (error) {
       console.error("Error submitting deposit request:", error);
-      toast.error(error.response?.data?.message || "Failed to submit deposit request. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit deposit request. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -173,6 +165,14 @@ const DepositPage = () => {
           border-radius: 15px;
           padding: 12px 16px;
           position: relative;
+          box-sizing: border-box;
+        }
+        @media (max-width: 600px) {
+          .deposit-ctn-new {
+            margin: 8px 4px;
+            padding: 10px 6px;
+            border-radius: 10px;
+          }
         }
 
         /* Report Header Styles */
@@ -246,6 +246,12 @@ const DepositPage = () => {
           margin: 9px 32px;
           text-transform: capitalize;
         }
+        @media (max-width: 600px) {
+          .deposit-ctn-new .report-header .report-filters .deposit-header-text {
+            margin: 8px 10px;
+            font-size: 12px;
+          }
+        }
 
         /* Disclaimer - grey, smaller font per design */
         .deposit-form-ctn .disclaimer-msg {
@@ -262,6 +268,23 @@ const DepositPage = () => {
           word-wrap: break-word;
           overflow-wrap: break-word;
           margin: 8px auto;
+        }
+
+        /* Payment type row - single-row horizontal scroll with hidden scrollbar */
+        .deposit-payment-type-row {
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+          gap: 6px;
+          padding: 10px 16px 4px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .deposit-payment-type-row::-webkit-scrollbar {
+          display: none;
         }
 
         /* Payment type buttons - BANK (cyan when selected), UPI/CRYPTO (white border), WHATSAPP (green when selected) */
@@ -281,11 +304,10 @@ const DepositPage = () => {
           transition: all 0.2s ease;
           border:1px solid #fff;
           background: transparent;
-          margin-right:6px;
           height:auto !important;
-          min-width:160px;
-          margin-top:10px;
           color: #fff;
+          flex-shrink: 0;
+          white-space: nowrap;
         }
         .deposit-payment-type-btn:hover {
           border-color: #fff;
@@ -299,18 +321,16 @@ const DepositPage = () => {
         }
         /* For WhatsApp button when selected */
         .deposit-payment-type-btn.selected-whatsapp {
-          padding: 5px 9px !important;
+          padding: 6px 12px;
           background: #22c55e !important;
           color: #fff !important;
-          min-width: 72px !important;
           border: 1px solid #fff !important;
           animation: blink-btn 1s infinite;
         }
 
         /* For WhatsApp button in normal state (always animated) */
         .deposit-payment-type-btn.whatsapp-normal {
-          padding: 5px 9px !important;
-          min-width: 72px !important;
+          padding: 6px 12px;
           animation: blink-btn 1s infinite;
           background: transparent;
           color: #fff;
@@ -354,6 +374,15 @@ const DepositPage = () => {
           color: #fff;
           font-weight: bolder;
         }
+        @media (max-width: 600px) {
+          .deposit-option-btn {
+            min-width: 0;
+            flex: 1 1 auto;
+            padding: 6px 8px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+          }
+        }
         .deposit-option-btn.selected {
           background: #01fafe;
           color: #000;
@@ -367,9 +396,9 @@ const DepositPage = () => {
         /* Amount Buttons - grey background, white text, rounded */
         .deposit-form-ctn .amount-btn {
           margin-top: 5px;
-          flex: 1;
-          width: calc(33% - 5px);
-          min-width: calc(33% - 8px);
+          flex: 1 1 calc(33.33% - 6px);
+          min-width: calc(33.33% - 6px);
+          max-width: calc(33.33% - 6px);
           box-sizing: border-box;
           border-radius: 100px;
           font-family: "Lato", var(--headers-font-family), sans-serif;
@@ -387,6 +416,15 @@ const DepositPage = () => {
           transition: all 0.2s ease;
           margin-right: 0px;
           margin-bottom: 4px;
+        }
+        @media (max-width: 600px) {
+          .deposit-form-ctn .amount-btn {
+            flex: 1 1 calc(33.33% - 4px);
+            min-width: calc(33.33% - 4px);
+            max-width: calc(33.33% - 4px);
+            padding: 8px 4px;
+            font-size: 9px;
+          }
         }
         .deposit-form-ctn .amount-btn:hover {
           background: #3a4a5e;
@@ -542,17 +580,22 @@ const DepositPage = () => {
         .next-btn {
           background: #3d4a62;
           color: #000000;
-          font-size:16px;
+          font-size: 14px;
           border: 1px solid #fff;
           padding: 12px 40px;
-          border-radius: 8px;
-          font-size: 14px;
+          border-radius: 100px;
           cursor: pointer;
           transition: all 0.2s ease;
           width: 120px;
-          margin-top: 20px;
-          border-radius: 100px;
-          margin:5px;
+          margin: 5px;
+        }
+        @media (max-width: 600px) {
+          .next-btn {
+            width: 100%;
+            max-width: 160px;
+            padding: 10px 20px;
+            font-size: 13px;
+          }
         }
 
         .next-btn:hover {
@@ -636,9 +679,10 @@ const DepositPage = () => {
         }
 
         .zenpay-ctn .input-template .it-label {
-          width: 320px;
+          width: auto;
+          max-width: 320px;
           text-transform: capitalize;
-          padding: 0 0 0 15px;
+          padding: 0 12px 0 15px;
           border-radius: 30px;
           border: 1px solid #008c95;
           background: #071123;
@@ -651,6 +695,14 @@ const DepositPage = () => {
           text-align: left;
           color: #fff;
           z-index: 1;
+          white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+          .zenpay-ctn .input-template .it-label {
+            max-width: 80%;
+            font-size: 11px;
+            left: 10px;
+          }
         }
 
         .zenpay-ctn .account-inputs .amount-input {
@@ -754,6 +806,27 @@ const DepositPage = () => {
           font-size: 14px;
           min-width: 180px;
         }
+        @media (max-width: 600px) {
+          .deposit-step2 .account-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+          }
+          .deposit-step2 .account-label {
+            min-width: unset;
+            font-size: 12px;
+          }
+          .deposit-step2 .account-value {
+            margin-left: 0;
+            font-size: 12px;
+            max-width: 100%;
+            word-break: break-all;
+          }
+          .deposit-step2 .account-heading {
+            font-size: 15px;
+            margin: 16px 0 10px 0;
+          }
+        }
         .deposit-step2 .account-value {
           background: #01fafe;
           color: #000;
@@ -801,6 +874,12 @@ const DepositPage = () => {
         .deposit-step2 .ref-input:focus {
           box-shadow: 0 0 0 1px #00E0FF;
         }
+        @media (max-width: 600px) {
+          .deposit-step2 .ref-input {
+            padding: 10px 14px;
+            font-size: 13px;
+          }
+        }
 
         /* Step 2 - Payment Method Radio */
         .deposit-step2 .payment-radio-group {
@@ -808,6 +887,12 @@ const DepositPage = () => {
           align-items: center;
           gap: 24px;
           margin: 20px 0;
+          flex-wrap: wrap;
+        }
+        @media (max-width: 600px) {
+          .deposit-step2 .payment-radio-group {
+            gap: 12px;
+          }
         }
         .deposit-step2 .payment-radio-item {
           display: flex;
@@ -878,6 +963,51 @@ const DepositPage = () => {
         .deposit-step2-buttons .confirm-btn {
           align-self: flex-start;
         }
+
+        @media (max-width: 600px) {
+          .deposit-step2-section {
+            margin-top: 16px;
+            padding-top: 16px;
+          }
+          .deposit-step2 .upload-btn,
+          .deposit-step2 .confirm-btn {
+            width: 100%;
+            text-align: center;
+            margin: 6px 0;
+            padding: 10px 16px;
+            font-size: 13px;
+          }
+          .deposit-step2-buttons {
+            gap: 10px;
+          }
+          .deposit-upi-section {
+            margin: 16px 0;
+            padding: 12px;
+          }
+          .deposit-upi-section .upi-instruction-banner {
+            font-size: 12px;
+            padding: 10px 12px;
+            margin: 10px 0 14px 0;
+          }
+          .deposit-upi-section .upi-qr {
+            width: 120px;
+            height: 120px;
+          }
+          .deposit-upi-section .upi-id-value {
+            font-size: 12px;
+            word-break: break-all;
+            max-width: 100%;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .deposit-note {
+            font-size: 11px;
+          }
+          .deposit-form-ctn .disclaimer-msg {
+            font-size: 11px;
+          }
+        }
       `}</style>
 
       <div className="deposit-ctn-new">
@@ -914,7 +1044,7 @@ const DepositPage = () => {
           </div>
 
           {/* Payment Type Row: BANK (5% BONUS), UPI, CRYPTO, WHATSAPP DEPOSIT */}
-          <div className="px-4 mt-3 flex flex-wrap items-center gap-2">
+          <div className="deposit-payment-type-row">
             <button
               onClick={() => setSelectedPaymentType("bank")}
               className={`deposit-payment-type-btn ${selectedPaymentType === "bank" ? "selected-bank" : ""}`}
@@ -934,8 +1064,8 @@ const DepositPage = () => {
               CRYPTO
             </button>
             <button
-              onClick={() => setSelectedPaymentType("whatsapp")}
-              className={`deposit-payment-type-btn ${selectedPaymentType === "whatsapp" ? "selected-whatsapp" : "whatsapp-normal"}`}
+              type="button"
+              className="deposit-payment-type-btn whatsapp-normal"
             >
               WHATSAPP DEPOSIT
             </button>
@@ -1060,6 +1190,7 @@ const DepositPage = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
+                flexWrap: "wrap",
               }}
             >
               <label
@@ -1096,22 +1227,25 @@ const DepositPage = () => {
               <div className="deposit-upi-section">
                 <h2 className="account-heading">Account Details</h2>
                 {loadingAccounts ? (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#fff" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#fff",
+                    }}
+                  >
                     Loading account details...
                   </div>
                 ) : accounts.upi ? (
                   <>
                     <div className="upi-instruction-banner">
-                      If Payment declined due To Security Reasons, Please Scan this
-                      below Qr Code
+                      If Payment declined due To Security Reasons, Please Scan
+                      this below Qr Code
                     </div>
                     <div className="upi-content">
                       {accounts.upi.qrCode && (
                         <div className="upi-qr">
-                          <img
-                            src={accounts.upi.qrCode}
-                            alt="UPI QR Code"
-                          />
+                          <img src={accounts.upi.qrCode} alt="UPI QR Code" />
                         </div>
                       )}
                       <div className="upi-details">
@@ -1126,8 +1260,22 @@ const DepositPage = () => {
                             }
                             title="Copy UPI ID"
                           >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <rect
+                                x="9"
+                                y="9"
+                                width="13"
+                                height="13"
+                                rx="2"
+                                ry="2"
+                              />
                               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
                           </button>
@@ -1136,7 +1284,13 @@ const DepositPage = () => {
                     </div>
                   </>
                 ) : (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#ff6b6b" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#ff6b6b",
+                    }}
+                  >
                     No UPI account found for Option {selectedOption}
                   </div>
                 )}
@@ -1147,13 +1301,21 @@ const DepositPage = () => {
               <>
                 <h2 className="account-heading">Account Details</h2>
                 {loadingAccounts ? (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#fff" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#fff",
+                    }}
+                  >
                     Loading account details...
                   </div>
                 ) : accounts.bank ? (
                   <>
                     <div className="account-row">
-                      <span className="account-label">Account Holder Name:</span>
+                      <span className="account-label">
+                        Account Holder Name:
+                      </span>
                       <span className="account-value">
                         {accounts.bank.accountHolder || "N/A"}
                         <button
@@ -1326,7 +1488,13 @@ const DepositPage = () => {
                     )}
                   </>
                 ) : (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#ff6b6b" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#ff6b6b",
+                    }}
+                  >
                     No bank account found for Option {selectedOption}
                   </div>
                 )}
@@ -1338,7 +1506,13 @@ const DepositPage = () => {
               <>
                 <h2 className="account-heading">Account Details</h2>
                 {loadingAccounts ? (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#fff" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#fff",
+                    }}
+                  >
                     Loading account details...
                   </div>
                 ) : accounts.crypto ? (
@@ -1351,14 +1525,19 @@ const DepositPage = () => {
                     </div>
                     <div className="account-row">
                       <span className="account-label">Wallet Address:</span>
-                      <span className="account-value" style={{ wordBreak: "break-all", maxWidth: "400px" }}>
+                      <span
+                        className="account-value"
+                        style={{ wordBreak: "break-all", maxWidth: "400px" }}
+                      >
                         {accounts.crypto.walletAddress || "N/A"}
                         <button
                           type="button"
                           className="copy-btn"
                           onClick={(e) => {
                             e.stopPropagation();
-                            copyToClipboard(accounts.crypto.walletAddress || "");
+                            copyToClipboard(
+                              accounts.crypto.walletAddress || ""
+                            );
                           }}
                           title="Copy"
                         >
@@ -1385,7 +1564,13 @@ const DepositPage = () => {
                     </div>
                   </>
                 ) : (
-                  <div style={{ textAlign: "center", padding: "20px", color: "#ff6b6b" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      color: "#ff6b6b",
+                    }}
+                  >
                     No crypto account found
                   </div>
                 )}
@@ -1469,11 +1654,14 @@ const DepositPage = () => {
                   {imageName}
                 </span>
               )}
-              <button 
-                onClick={handleConfirm} 
+              <button
+                onClick={handleConfirm}
                 className="confirm-btn"
                 disabled={submitting}
-                style={{ opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+                style={{
+                  opacity: submitting ? 0.6 : 1,
+                  cursor: submitting ? "not-allowed" : "pointer",
+                }}
               >
                 {submitting ? "Submitting..." : "Confirm Payment"}
               </button>

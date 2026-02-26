@@ -40,11 +40,9 @@ const DepositPage = lazy(() => import("./pages/menu/DepositPage"));
 const WithdrawPage = lazy(() => import("./pages/menu/WithdrawPage"));
 const Casino = lazy(() => import("./pages/casino/Casino"));
 const LaunchGame = lazy(() => import("./pages/casino/LaunchGame"));
+const SportsGames = lazy(() => import("./pages/sports/SportsGames"));
 const MyProfile = lazy(() => import("./pages/profile/MyProfile"));
-const CheckBonuses = lazy(() => import("./pages/profile/CheckBonuses"));
 const Preferences = lazy(() => import("./pages/profile/Preferences"));
-const TermsPolicy = lazy(() => import("./pages/TermsPolicy"));
-const GameRules = lazy(() => import("./pages/Rule"));
 function PageLoader() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
@@ -117,6 +115,9 @@ function App() {
               <Route path="home" element={<Home />} />
               <Route path="inplay" element={<Inplay />} />
               <Route path="casino" element={<Casino />} />
+              <Route path="saba" element={<SportsGames />} />
+              <Route path="lucky" element={<SportsGames />} />
+              <Route path="bti" element={<SportsGames />} />
               <Route path="/launch-game/:gameuid" element={<LaunchGame />} />
               <Route path="multimarkets" element={<MultiMarkets />} />
               <Route path="cricket/preview" element={<PreviewPage1 />} />
@@ -142,10 +143,7 @@ function App() {
               <Route path="withdraw" element={<WithdrawPage />} />
               <Route path="my_transaction" element={<MyTransaction />} />
               <Route path="my_profile" element={<MyProfile />} />
-              <Route path="check-bonuses" element={<CheckBonuses />} />
               <Route path="preferences" element={<Preferences />} />
-              <Route path="terms-policy" element={<TermsPolicy />} />
-              <Route path="game-rules" element={<GameRules />} />
             </Route>
           </Route>
         </Routes>

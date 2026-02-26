@@ -11,7 +11,6 @@ import TrandingGames from "../../components/home/TrandingGames";
 import RecomendedGames from "../../components/home/RecomendedGames";
 import LiveCasinoGames from "../../components/home/LiveCasinoGames";
 import SlotsGame from "../../components/home/SlotsGame";
-import FooterInfo from "../../components/home/FooterInfo";
 
 function Home() {
   const dispatch = useDispatch();
@@ -53,7 +52,6 @@ function Home() {
         <RecomendedGames />
         <LiveCasinoGames />
         <SlotsGame />
-        <FooterInfo />
       </div>
     </div>
   );
