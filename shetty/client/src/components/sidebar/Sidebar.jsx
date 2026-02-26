@@ -84,27 +84,32 @@ function Sidebar({ setSidebarOpen }) {
   const securityLogout = [{ id: 2, label: "Logout", icon: IoLogOut }];
 
   return (
-    <nav className="h-full w-full flex flex-col bg-[#fff] ">
-      <div className="icon-bg-colour flex justify-center items-center h-12">
-        <>
+    <nav className="h-full w-full flex flex-col bg-gradient-to-b from-[#0a1a2f] to-[#0f1e34]">
+      {/* Logo Section */}
+      <div className="icon-bg-colour border-b border-[#2a3a50] shadow-lg">
+        <div className="relative flex items-center justify-center h-20 px-3">
+          {/* Desktop Logo - full width */}
           <img
             src={DesktopImg}
             alt="Logo"
-            className="hidden lg:block h-8 object-contain"
+            className="hidden lg:block w-full h-full object-contain py-2 px-2"
           />
+          {/* Mobile Logo - full width */}
           <img
             src={MobileImg}
             alt="Logo"
-            className="block lg:hidden h-8 object-contain"
+            className="block lg:hidden w-full h-full object-contain py-2 px-2"
           />
-        </>
-        <CgCloseO
-          className="absolute right-4 top-3 w-7 h-7 text-white md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+          {/* Close Button */}
+          <CgCloseO
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 text-white md:hidden cursor-pointer flex-shrink-0"
+            onClick={() => setSidebarOpen(false)}
+          />
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      {/* Rest of the sidebar content remains the same */}
+      <div className="flex-1 overflow-y-auto bg-white">
         <div className="flex items-center px-6 py-3 gap-2">
           <div className="rounded-full icon-bg-colour w-8 h-8 flex items-center justify-center text-[#fff] text-[12px] font-[600]">
             {avatarLetter}
@@ -140,7 +145,7 @@ function Sidebar({ setSidebarOpen }) {
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center overflow-hidden shrink-0">
                   {item.image ? (
                     <img
-                      src={item.image} // use the actual image from the array
+                      src={item.image}
                       alt={item.label}
                       className="w-full h-full object-cover"
                     />
@@ -232,10 +237,12 @@ function Sidebar({ setSidebarOpen }) {
         </div>
       </div>
 
-      <div className="p-2 ">
-        <button className="w-full bg-[#071123] text-white py-3 rounded-2xl flex items-center justify-center gap-2 font-medium transition">
-          <RiWhatsappFill />
-          <span className="text-[10px] font-[700]">FOLLOW ON WHATSAPP</span>
+      <div className="p-2">
+        <button className="w-full bg-gradient-to-r from-[#0f1e34] to-[#1a2a40] hover:from-[#1a2a40] hover:to-[#0f1e34] text-white py-3 rounded-2xl flex items-center justify-center gap-2 font-medium transition-all duration-300 border border-[#2a3a50] hover:border-[#3b82f6] group">
+          <RiWhatsappFill className="text-[#25D366] group-hover:scale-110 transition-transform duration-300" />
+          <span className="text-[10px] font-[700] tracking-wider">
+            FOLLOW ON WHATSAPP
+          </span>
         </button>
       </div>
     </nav>

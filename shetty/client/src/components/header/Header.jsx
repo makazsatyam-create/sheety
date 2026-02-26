@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import WhatsappIcon from "../../assets/whatsappicon.png";
+import MobileLogo from "../../assets/MobileLogo.png";
 import { MdInfoOutline } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -24,11 +25,11 @@ function Header({ onMenuClick, sidebarOpen }) {
 
   return (
     <header className="sticky top-0 z-30 table-bg border-b border-gray-800">
-      <div className="flex items-center justify-between h-12 px-4 lg:px-6">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between h-14 px-3 lg:px-6">
+        <div className="flex items-center gap-2">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 hover:bg-gray-800 rounded transition"
+            className="lg:hidden p-1 hover:bg-gray-800 rounded transition"
             aria-label="Toggle menu"
           >
             {sidebarOpen ? (
@@ -37,6 +38,12 @@ function Header({ onMenuClick, sidebarOpen }) {
               <Menu className="w-6 h-6 text-white" />
             )}
           </button>
+          {/* Mobile Logo in header */}
+          <img
+            src={MobileLogo}
+            alt="Logo"
+            className="lg:hidden h-10 w-auto object-contain"
+          />
           <div className="hidden lg:flex items-center gap-1">
             {menuitems.map((item) => (
               <span
