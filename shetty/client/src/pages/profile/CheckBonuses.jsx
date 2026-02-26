@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../redux/api";
-import { FiSearch } from "react-icons/fi";
+import "./MyProfile.css";
 
 const CheckBonuses = () => {
   const [couponCode, setCouponCode] = useState("");
@@ -31,7 +31,7 @@ const CheckBonuses = () => {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to redeem coupon code"
+        error.response?.data?.message || "Reedom bonus already used."
       );
     } finally {
       setSearching(false);
