@@ -9,52 +9,11 @@ import Banner1 from "../../assets/banner1.webp";
 import Banner2 from "../../assets/banner2.webp";
 import Banner3 from "../../assets/banner3.webp";
 import Banner4 from "../../assets/banner4.webp";
-import cricketicon from "../../assets/cricketicon.webp";
-import footballicon from "../../assets/footballIcon.webp";
-import liveEvent from "../../assets/liveEvent.gif";
 import NewLaunch from "../../components/home/NewLaunch";
 import CricketBattleComp from "../../components/home/CricketBattle";
-import TrandingGames from "../../components/home/TrandingGames";
 import RecomendedGames from "../../components/home/RecomendedGames";
 import LiveCasinoGames from "../../components/home/LiveCasinoGames";
 import SlotsGame from "../../components/home/SlotsGame";
-
-function formatMatchTime(dateStr) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return String(dateStr);
-  const now = new Date();
-  const isToday = d.toDateString() === now.toDateString();
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const isTomorrow = d.toDateString() === tomorrow.toDateString();
-  const time = d.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-  if (isToday) return `Today ${time}`;
-  if (isTomorrow) return `Tomorrow ${time}`;
-  return d
-    .toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .replace(",", " ");
-}
-
-function isWithinNext24Hours(dateStr) {
-  if (!dateStr) return false;
-  const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return false;
-  const now = new Date();
-  const in24 = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  return d >= now && d <= in24;
-}
 
 function Home() {
   const dispatch = useDispatch();
