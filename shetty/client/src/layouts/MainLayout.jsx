@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/header/Header";
 import Sidebar from "../components/sidebar/Sidebar";
 import BottomNav from "../components/navigation/BottomNav";
-
 import RulesModal from "../components/footer/RulesModal";
 
 function MainLayout() {
@@ -80,8 +79,6 @@ function MainLayout() {
           </footer>
         )}
       </div>
-
-      {/* WhatsApp floating button - Mobile only on Home & In-play */}
 
       {/* Bottom Navigation - Mobile only; hidden on Launch Game page */}
       {!isLaunchGame && <BottomNav />}
