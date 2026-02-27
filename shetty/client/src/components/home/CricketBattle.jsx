@@ -1,8 +1,20 @@
 import React from "react";
 import CricketBattleImg from "../../assets/cricketBattle.png";
 import { useNavigate } from "react-router-dom";
+import LuckyGames from "../../data/lucky.json";
+
 function CricketBattle() {
   const navigate = useNavigate();
+
+  const handleLaunch = () => {
+    const firstGame = LuckyGames?.[0];
+    if (!firstGame?.game_uid) return;
+    const query = firstGame.game_type
+      ? `?gameType=${encodeURIComponent(firstGame.game_type)}`
+      : "";
+    navigate(`/launch-game/${firstGame.game_uid}${query}`);
+  };
+
   return (
     <div>
       <div>
@@ -10,13 +22,12 @@ function CricketBattle() {
           Cricket Battle
         </span>
         <div className="relative mt-2 h-[2px] w-full bg-cyan-500/30">
-          {/* Highlight segment */}
-          <div className="absolute left-0 top-0 h-full w-[100px]  bg-cyan-400 rounded-full" />
+          <div className="absolute left-0 top-0 h-full w-[100px] bg-cyan-400 rounded-full" />
         </div>
         <div>
           <img
             src={CricketBattleImg}
-            onClick={() => navigate("/lucky")}
+            onClick={handleLaunch}
             alt="Cricket Battle"
             className="w-full mt-2 cursor-pointer"
           />

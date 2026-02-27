@@ -110,6 +110,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/launch-game/:gameuid" element={<LaunchGame />} />
             <Route element={<MainLayout />}>
               <Route index element={<Navigate to="/home" replace />} />
               <Route path="home" element={<Home />} />
@@ -118,7 +119,6 @@ function App() {
               <Route path="saba" element={<SportsGames />} />
               <Route path="lucky" element={<SportsGames />} />
               <Route path="bti" element={<SportsGames />} />
-              <Route path="/launch-game/:gameuid" element={<LaunchGame />} />
               <Route path="multimarkets" element={<MultiMarkets />} />
               <Route path="cricket/preview" element={<PreviewPage1 />} />
               <Route path="cricket" element={sportLayoutWithOutlet()}>
