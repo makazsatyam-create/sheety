@@ -33,6 +33,7 @@ function LaunchGame() {
   const [gameUrl, setGameUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [iframeHeight, setIframeHeight] = useState("100vh");
 
   // Use ref to track if game has been launched to prevent re-launching on auth updates
   const hasLaunchedRef = useRef(false);
@@ -43,6 +44,25 @@ function LaunchGame() {
       wsService.connect(dispatch, userId);
     }
   }, [dispatch, userId]);
+
+  // Handle responsive iframe height
+  useEffect(() => {
+    const updateIframeHeight = () => {
+      // On mobile, we want to account for browser chrome (address bar, etc.)
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      setIframeHeight(`calc(var(--vh, 1vh) * 100)`);
+    };
+
+    updateIframeHeight();
+    window.addEventListener("resize", updateIframeHeight);
+    window.addEventListener("orientationchange", updateIframeHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateIframeHeight);
+      window.removeEventListener("orientationchange", updateIframeHeight);
+    };
+  }, []);
 
   useEffect(() => {
     const launchGame = async () => {
@@ -153,6 +173,36 @@ function LaunchGame() {
     launchGame();
   }, [userInfo, gameuid, dispatch]); // Removed authLoading from dependencies
 
+  // Add viewport meta tag if not already present
+  useEffect(() => {
+    // Check if viewport meta tag exists
+    let viewportMeta = document.querySelector('meta[name="viewport"]');
+
+    if (!viewportMeta) {
+      viewportMeta = document.createElement("meta");
+      viewportMeta.name = "viewport";
+      document.head.appendChild(viewportMeta);
+    }
+
+    // Set proper viewport for mobile gaming
+    viewportMeta.content =
+      "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover";
+
+    // Add styles to prevent body scrolling
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+    document.body.style.height = "100%";
+
+    return () => {
+      // Cleanup on unmount
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -186,12 +236,37 @@ function LaunchGame() {
   }
 
   return (
-    <div className="w-full h-screen">
+    <div
+      className="game-container"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        backgroundColor: "#000", // Optional: black background for letterboxing
+      }}
+    >
       <iframe
         src={gameUrl}
-        className="w-full h-full border-0"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          border: "none",
+          // For games that might not be responsive, you can use object-fit
+          // objectFit: 'contain', // This will letterbox the game if needed
+          // objectFit: 'cover',   // This will crop the game if needed
+        }}
         title="Casino Game"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation"
       />
     </div>
   );
