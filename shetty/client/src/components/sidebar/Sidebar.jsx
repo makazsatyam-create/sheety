@@ -25,8 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 import sabaImg from "../../assets/saba.jpg";
 import luckyImg from "../../assets/luckysports.png";
 import btiImg from "../../assets/bti.png";
-import DesktopImg from "../../assets/desktopLogo.png";
-import MobileImg from "../../assets/MobileLogo.png";
+import MobileImg from "../../assets/shetty-logo-mobile.png";
+import DesktopImg from "../../assets/shetty-logo-desktop.png";
 
 const sportsMenu = [
   { id: "saba", label: "Saba", path: "/saba", image: sabaImg },
