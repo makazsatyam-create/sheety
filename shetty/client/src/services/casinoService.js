@@ -1,14 +1,16 @@
 import api from "../redux/api";
 
-// Start casino game
-export const startCasinoGame = async (userName, game_uid, credit_amount) => {
-  console.log(userName, game_uid, credit_amount);
+// Start casino game (gameType optional, for Saba/Lucky/BTI sports)
+export const startCasinoGame = async (
+  userName,
+  game_uid,
+  credit_amount,
+  gameType
+) => {
   try {
-    const response = await api.post("/casino/start", {
-      userName,
-      game_uid,
-      credit_amount,
-    });
+    const body = { userName, game_uid, credit_amount };
+    if (gameType != null && gameType !== "") body.gameType = gameType;
+    const response = await api.post("/casino/start", body);
     return response.data;
   } catch (error) {
     if (error.response?.status === 401) {

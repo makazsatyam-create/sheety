@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MenuHeaderBox from "../../components/menu/MenuHeaderBox";
-import BetsTableRows from "../../components/menu/BetsTableRows";
 import ListIcon from "@mui/icons-material/List";
-import { getBetHistory, getCasinoBetHistory } from "../../redux/reducer/betReducer";
+import { getCasinoBetHistory } from "../../redux/reducer/betReducer";
 
 const DEFAULT_LIMIT = 20;
 const PNL_COLUMNS = [
@@ -28,42 +27,6 @@ function formatDate(d) {
   });
 }
 
-function statusToResult(status) {
-  switch (status) {
-    case 0:
-      return "Open"; // Unsettled
-    case 1:
-      return "Won"; // Settled & Won
-    case 2:
-      return "Lost"; // Settled & Lost
-    case 3:
-      return "Void"; // Void
-    default:
-      return "-";
-  }
-}
-
-function mapBetHistoryToRows(betHistory = [], currentBetStatus) {
-  const isVoidFilter = currentBetStatus === "Void";
-  return betHistory.map((row) => ({
-    id: row._id || row.betId || row.id,
-    placeDate: formatDate(row.date),
-    eventName: row.eventName || "-",
-    market: row.marketName || "-",
-    betOn: row.teamName || "-",
-    betType: (() => {
-      const raw = (row.betType || row.otype || "").toString().toLowerCase();
-      if (raw === "back") return "Back";
-      if (raw === "lay") return "Lay";
-      return row.betType || row.otype || "-";
-    })(),
-    odds: row.xValue,
-    amount: row.price,
-    result: statusToResult(row.status, isVoidFilter),
-    winnings: row.profitLossChange,
-  }));
-}
-
 function mapCasinoBetHistoryToRows(casinoBetHistory = []) {
   return casinoBetHistory.map((row) => ({
     id: row._id || row.game_round || row.id,
@@ -83,93 +46,35 @@ function MyBets() {
   const dispatch = useDispatch();
   const userId =
     useSelector((state) => state.auth?.userInfo?._id ?? state.auth?.userInfo?.id) ?? null;
-  const {
-    betHistory,
-    casinoBetHistory,
-    loading,
-    pagination,
-    casinoPagination,
-  } = useSelector((state) => state.bet);
+  const { casinoBetHistory, loading } = useSelector((state) => state.bet);
   const defaultTo = new Date().toISOString().split("T")[0];
   const defaultFrom = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
   const [filters, setFilters] = React.useState({
-    betStatus: "Open",
-    selectGames: "Cricket Game",
     from: defaultFrom,
     to: defaultTo,
   });
 
-  const isCasino = filters.selectGames === "Casino";
-
   useEffect(() => {
-    if (isCasino) {
-      if (!userId) return;
-      dispatch(
-        getCasinoBetHistory({
-          userId,
-          page: 1,
-          limit: DEFAULT_LIMIT,
-          startDate: filters.from,
-          endDate: filters.to,
-        })
-      );
-      return;
-    }
+    if (!userId) return;
+    dispatch(
+      getCasinoBetHistory({
+        userId,
+        page: 1,
+        limit: DEFAULT_LIMIT,
+        startDate: filters.from,
+        endDate: filters.to,
+      })
+    );
+  }, [dispatch, userId, filters.from, filters.to]);
 
-    const params = {
-      page: 1,
-      limit: DEFAULT_LIMIT,
-    };
-    if (filters.from && filters.to) {
-      params.startDate = filters.from;
-      params.endDate = filters.to;
-    }
-    // Map UI option -> API selectedVoid (so Open/Void/Settled show correctly)
-    if (filters.betStatus === "Settled") params.selectedVoid = "settel";
-    else if (filters.betStatus === "Void") params.selectedVoid = "void";
-    else params.selectedVoid = "unsettle"; // Open
-    if (filters.selectGames) params.selectedGame = filters.selectGames;
-
-    dispatch(getBetHistory(params));
-  }, [
-    dispatch,
-    isCasino,
-    userId,
-    filters.betStatus,
-    filters.selectGames,
-    filters.from,
-    filters.to,
-  ]);
-
-  const tableRows = useMemo(() => {
-    if (isCasino) {
-      return mapCasinoBetHistoryToRows(casinoBetHistory);
-    }
-    // First filter out any bets that shouldn't be shown when filter is Void
-    let filteredBets = betHistory;
-    if (filters.betStatus === "Void") {
-      filteredBets = betHistory.filter((bet) => bet.status === 2);
-    }
-    return mapBetHistoryToRows(filteredBets);
-  }, [isCasino, casinoBetHistory, betHistory, filters.betStatus]);
+  const tableRows = useMemo(
+    () => mapCasinoBetHistoryToRows(casinoBetHistory),
+    [casinoBetHistory]
+  );
 
   const filterFields = [
-    {
-      id: "betStatus",
-      label: "Bet Status",
-      type: "select",
-      value: filters.betStatus,
-      options: ["Open", "Settled", "Void"],
-    },
-    {
-      id: "selectGames",
-      label: "Select Games",
-      type: "select",
-      value: filters.selectGames,
-      options: ["Casino", "Live", "Tennis Game", "Cricket Game", "Soccer Game"],
-    },
     { id: "from", label: "From", type: "date", value: filters.from },
     { id: "to", label: "To", type: "date", value: filters.to },
   ];

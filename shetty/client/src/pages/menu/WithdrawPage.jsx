@@ -54,7 +54,8 @@ const WithdrawPage = () => {
       const response = await api.post("/send-withdrawal-otp");
       if (response.data && response.data.message) {
         toast.success(response.data.message);
-        if (otpCooldownIntervalRef.current) clearInterval(otpCooldownIntervalRef.current);
+        if (otpCooldownIntervalRef.current)
+          clearInterval(otpCooldownIntervalRef.current);
         setOtpCooldown(60); // 60 second cooldown
         otpCooldownIntervalRef.current = setInterval(() => {
           setOtpCooldown((prev) => {
@@ -77,12 +78,7 @@ const WithdrawPage = () => {
   };
 
   const handleAddBank = async () => {
-    if (
-      !accountNumber ||
-      !accountHolderName ||
-      !bankName ||
-      !ifscCode
-    ) {
+    if (!accountNumber || !accountHolderName || !bankName || !ifscCode) {
       toast.error("Please fill all required account details");
       return;
     }
@@ -102,7 +98,7 @@ const WithdrawPage = () => {
     setSubmitting(true);
     try {
       const optionStr = `option${selectedOption}`;
-      
+
       const withdrawalData = {
         amount: parseFloat(withdrawalAmount),
         paymentType: "bank",
@@ -119,16 +115,23 @@ const WithdrawPage = () => {
       const response = await api.post("/withdrawal-request", withdrawalData);
 
       if (response.data.success) {
-        toast.success("Withdrawal request submitted successfully! It will be processed after admin approval.");
+        toast.success(
+          "Withdrawal request submitted successfully! It will be processed after admin approval."
+        );
         resetBankForm();
         setWithdrawalAmount("");
         dispatch(getUser()); // Refresh user balance
       } else {
-        toast.error(response.data.message || "Failed to submit withdrawal request");
+        toast.error(
+          response.data.message || "Failed to submit withdrawal request"
+        );
       }
     } catch (error) {
       console.error("Error submitting withdrawal request:", error);
-      toast.error(error.response?.data?.message || "Failed to submit withdrawal request. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit withdrawal request. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -170,16 +173,23 @@ const WithdrawPage = () => {
       const response = await api.post("/withdrawal-request", withdrawalData);
 
       if (response.data.success) {
-        toast.success("Withdrawal request submitted successfully! It will be processed after admin approval.");
+        toast.success(
+          "Withdrawal request submitted successfully! It will be processed after admin approval."
+        );
         resetCryptoForm();
         setWithdrawalAmount("");
         dispatch(getUser()); // Refresh user balance
       } else {
-        toast.error(response.data.message || "Failed to submit withdrawal request");
+        toast.error(
+          response.data.message || "Failed to submit withdrawal request"
+        );
       }
     } catch (error) {
       console.error("Error submitting withdrawal request:", error);
-      toast.error(error.response?.data?.message || "Failed to submit withdrawal request. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit withdrawal request. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -219,7 +229,9 @@ const WithdrawPage = () => {
           className="withdraw-form-input"
           placeholder="Enter amount to withdraw"
           value={withdrawalAmount}
-          onChange={(e) => setWithdrawalAmount(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) =>
+            setWithdrawalAmount(e.target.value.replace(/\D/g, ""))
+          }
         />
         <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "4px" }}>
           Available Balance: ₹{cashableAmount}
@@ -299,9 +311,16 @@ const WithdrawPage = () => {
             className="withdraw-send-otp-btn"
             onClick={handleSendOtp}
             disabled={sendingOtp || otpCooldown > 0}
-            style={{ opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1, cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer" }}
+            style={{
+              opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1,
+              cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer",
+            }}
           >
-            {sendingOtp ? "Sending..." : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : "Send OTP"}
+            {sendingOtp
+              ? "Sending..."
+              : otpCooldown > 0
+                ? `Resend in ${otpCooldown}s`
+                : "Send OTP"}
           </button>
         </div>
       </div>
@@ -312,7 +331,10 @@ const WithdrawPage = () => {
           className="withdraw-add-btn"
           onClick={handleAddBank}
           disabled={submitting}
-          style={{ opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+          style={{
+            opacity: submitting ? 0.6 : 1,
+            cursor: submitting ? "not-allowed" : "pointer",
+          }}
         >
           {submitting ? "Submitting..." : "SUBMIT WITHDRAWAL REQUEST"}
         </button>
@@ -338,7 +360,9 @@ const WithdrawPage = () => {
           className="withdraw-form-input"
           placeholder="Enter amount to withdraw"
           value={withdrawalAmount}
-          onChange={(e) => setWithdrawalAmount(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) =>
+            setWithdrawalAmount(e.target.value.replace(/\D/g, ""))
+          }
         />
         <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "4px" }}>
           Available Balance: ₹{cashableAmount}
@@ -390,9 +414,16 @@ const WithdrawPage = () => {
             className="withdraw-send-otp-btn"
             onClick={handleSendOtp}
             disabled={sendingOtp || otpCooldown > 0}
-            style={{ opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1, cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer" }}
+            style={{
+              opacity: sendingOtp || otpCooldown > 0 ? 0.7 : 1,
+              cursor: sendingOtp || otpCooldown > 0 ? "not-allowed" : "pointer",
+            }}
           >
-            {sendingOtp ? "Sending..." : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : "Send OTP"}
+            {sendingOtp
+              ? "Sending..."
+              : otpCooldown > 0
+                ? `Resend in ${otpCooldown}s`
+                : "Send OTP"}
           </button>
         </div>
       </div>
@@ -403,7 +434,10 @@ const WithdrawPage = () => {
           className="withdraw-add-btn"
           onClick={handleAddWallet}
           disabled={submitting}
-          style={{ opacity: submitting ? 0.6 : 1, cursor: submitting ? "not-allowed" : "pointer" }}
+          style={{
+            opacity: submitting ? 0.6 : 1,
+            cursor: submitting ? "not-allowed" : "pointer",
+          }}
         >
           {submitting ? "Submitting..." : "SUBMIT WITHDRAWAL REQUEST"}
         </button>
@@ -426,58 +460,90 @@ const WithdrawPage = () => {
         }
         .withdraw-ctn {
           min-height: 83vh;
-  margin: 12px 24px;
-  background: #122036;
-  padding: 16px 12px;
-  border-radius: 15px;
-  position: relative;
+          margin: 12px 24px;
+          background: #122036;
+          padding: 16px 12px;
+          border-radius: 15px;
+          position: relative;
+          box-sizing: border-box;
         }
         @media (max-width: 768px) {
           .withdraw-ctn {
-            margin: 12px;
-            padding: 12px;
+            margin: 10px 8px;
+            padding: 12px 8px;
+          }
+        }
+        @media (max-width: 480px) {
+          .withdraw-ctn {
+            margin: 8px 4px;
+            padding: 10px 6px;
+            border-radius: 10px;
           }
         }
 
         .withdraw-header {
-  width: 100%;
-  background: #212e44;
-  border-radius: 15px;
-  font-family: "Lato";
-  margin-bottom: 20px;
-  padding: 12px;
-}
+          width: 100%;
+          background: #212e44;
+          border-radius: 15px;
+          font-family: "Lato";
+          margin-bottom: 20px;
+          padding: 12px;
+          box-sizing: border-box;
+        }
 
-.withdraw-header .withdraw-img-title {
-  height: 42px;
-  display: flex;
-  align-items: center;
-  background: #071123;
-  border: 1px solid #04a0e2;
-  border-radius: 25px;
-  padding: 0 16px;
-  margin-bottom: 12px;
-}
+        .withdraw-header .withdraw-img-title {
+          height: 42px;
+          display: flex;
+          align-items: center;
+          background: #071123;
+          border: 1px solid #04a0e2;
+          border-radius: 25px;
+          padding: 0 16px;
+          margin-bottom: 12px;
+        }
 
-.withdraw-header .withdraw-img-title .withdraw-title {
-  color: #fff;
-  font-size: 16px;
-  text-transform: uppercase;
-  font-family: "Lato";
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
+        .withdraw-header .withdraw-img-title .withdraw-title {
+          color: #fff;
+          font-size: 16px;
+          text-transform: uppercase;
+          font-family: "Lato";
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
 
-.withdraw-header .withdraw-info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  color: #9ca3af;
-  font-size: 13px;
-  padding: 0 8px;
-}
+        .withdraw-header .withdraw-info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          color: #9ca3af;
+          font-size: 13px;
+          padding: 0 8px;
+        }
+
+        @media (max-width: 480px) {
+          .withdraw-header {
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+          }
+          .withdraw-header .withdraw-img-title {
+            height: 36px;
+            padding: 0 10px;
+            margin-bottom: 8px;
+          }
+          .withdraw-header .withdraw-img-title .withdraw-title {
+            font-size: 13px;
+          }
+          .withdraw-header .withdraw-info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            font-size: 11px;
+            padding: 0 4px;
+          }
+        }
 
 /* Remove the old .withdraw-info-row from outside */
 
@@ -499,6 +565,14 @@ const WithdrawPage = () => {
           margin-right: 6px;
           margin-top: 10px;
         }
+        @media (max-width: 480px) {
+          .withdraw-payment-type-btn {
+            padding: 6px 14px;
+            font-size: 12px;
+            margin-right: 4px;
+            margin-top: 8px;
+          }
+        }
         .withdraw-payment-type-btn.selected {
           background: #01fafe;
           color: #000;
@@ -514,6 +588,12 @@ const WithdrawPage = () => {
           font-weight: 600;
           margin: 20px 0 12px 0;
           display: block;
+        }
+        @media (max-width: 480px) {
+          .withdraw-option-label {
+            font-size: 12px;
+            margin: 14px 0 8px 0;
+          }
         }
 
         .withdraw-accounts-section {
@@ -556,6 +636,20 @@ const WithdrawPage = () => {
             height: 120px;
           }
         }
+        @media (max-width: 480px) {
+          .withdraw-add-account-card {
+            width: 100px;
+            height: 100px;
+            min-width: 80px;
+            min-height: 80px;
+          }
+          .withdraw-add-account-card .plus-icon {
+            font-size: 26px;
+          }
+          .withdraw-add-account-card span {
+            font-size: 11px;
+          }
+        }
 
         /* Form styles */
         .withdraw-enter-details {
@@ -582,11 +676,21 @@ const WithdrawPage = () => {
           position: relative;
           color: #fff;
         }
+        @media (max-width: 480px) {
+          .withdraw-enter-details .withdraw-form-group {
+            margin-bottom: 22px;
+          }
+          .withdraw-enter-details .form-title {
+            font-size: 16px;
+            margin-bottom: 20px;
+          }
+        }
 
         .withdraw-enter-details .withdraw-form-label {
-          width: 230px;
+          width: auto;
+          max-width: 230px;
           text-transform: capitalize;
-          padding: 0 0 0 15px;
+          padding: 0 12px 0 15px;
           border-radius: 30px;
           border: 1px solid #008c95;
           background: #071123;
@@ -606,6 +710,14 @@ const WithdrawPage = () => {
           white-space: nowrap;
           box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
+        @media (max-width: 480px) {
+          .withdraw-enter-details .withdraw-form-label {
+            max-width: 80%;
+            font-size: 11px;
+            left: 10px;
+            min-width: 0;
+          }
+        }
 
         .withdraw-enter-details .withdraw-form-input {
           background: #3d4a62;
@@ -621,6 +733,12 @@ const WithdrawPage = () => {
           font-family: "Lato", sans-serif;
           box-sizing: border-box;
           transition: all 0.2s ease;
+        }
+        @media (max-width: 480px) {
+          .withdraw-enter-details .withdraw-form-input {
+            padding: 12px 16px;
+            font-size: 12px;
+          }
         }
 
         .withdraw-enter-details .withdraw-form-input:focus {
@@ -666,6 +784,13 @@ const WithdrawPage = () => {
           min-height: 48px;
           letter-spacing: 0.5px;
         }
+        @media (max-width: 480px) {
+          .withdraw-enter-details .withdraw-send-otp-btn {
+            padding: 10px 16px;
+            font-size: 12px;
+            min-height: 42px;
+          }
+        }
 
         .withdraw-enter-details .withdraw-send-otp-btn:hover {
           background: #008c95;
@@ -688,6 +813,13 @@ const WithdrawPage = () => {
           font-family: "Lato", sans-serif;
           letter-spacing: 0.5px;
           min-width: 120px;
+        }
+        @media (max-width: 480px) {
+          .withdraw-enter-details .withdraw-add-btn {
+            padding: 12px 20px;
+            font-size: 13px;
+            min-width: 0;
+          }
         }
 
         .withdraw-enter-details .withdraw-add-btn:hover {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUser, changePasswordBySelf } from "../../redux/reducer/authReducer";
 import { toast } from "react-toastify";
@@ -27,12 +28,18 @@ const navItems = [
   { id: "bonuses", label: "Check Bonuses", icon: FiGift },
 ];
 
+const VALID_TABS = ["personal", "password", "deposit", "withdraw", "bonuses"];
+
 const MyProfile = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth?.userInfo);
   const authLoading = useSelector((state) => state.auth?.loading);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("personal");
+  const initialTab = location.state?.tab;
+  const [activeTab, setActiveTab] = useState(
+    initialTab && VALID_TABS.includes(initialTab) ? initialTab : "personal"
+  );
 
   const [form, setForm] = useState({
     fullName: "",
@@ -54,6 +61,11 @@ const MyProfile = () => {
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    const tab = location.state?.tab;
+    if (tab && VALID_TABS.includes(tab)) setActiveTab(tab);
+  }, [location.state?.tab]);
 
   useEffect(() => {
     if (userInfo) {

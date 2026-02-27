@@ -1,133 +1,60 @@
-import React from 'react'
-
-export const recommendedGames = [
-  {
-    id: 1,
-    src: "https://cdn.dreamdelhi.com/trending/ab.webp",
-    alt: "Andar Bahar"
-  },
-  {
-    id: 2,
-    src: "https://cdn.dreamdelhi.com/trending/baccarat.webp",
-    alt: "Baccarat"
-  },
-  {
-    id: 3,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-Y1MTP101.webp",
-    alt: "Muflis Teenpatti"
-  },
-  {
-    id: 4,
-    src: "https://cdn.dreamdelhi.com/trending/bc.webp",
-    alt: "Bollywood Casino"
-  },
-  {
-    id: 5,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-YDT102.webp",
-    alt: "Dragon Tiger"
-  },
-  {
-    id: 6,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-DT2101.webp",
-    alt: "Dragon Tiger 2"
-  },
-  {
-    id: 7,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-X2TP101.webp",
-    alt: "Instant 2 Cards Teenpatti"
-  },
-  {
-    id: 8,
-    src: "https://cdn.dreamdelhi.com/trending/l7.webp",
-    alt: "Lucky 7"
-  },
-  {
-    id: 9,
-    src: "https://cdn.dreamdelhi.com/trending/poker.webp",
-    alt: "Poker 1-Day"
-  },
-  {
-    id: 10,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-YRTT102.webp",
-    alt: "Race 20"
-  },
-  {
-    id: 11,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-XRT101.webp",
-    alt: "Roulette"
-  },
-  {
-    id: 12,
-    src: "https://cdn.dreamdelhi.com/trending/sicbo.webp",
-    alt: "Sic Bo"
-  },
-  {
-    id: 13,
-    src: "https://cdn.dreamdelhi.com/trending/ttp.webp",
-    alt: "Teenpatti"
-  },
-  {
-    id: 14,
-    src: "https://cdn.dreamdelhi.com/trending/5c.webp",
-    alt: "5 Five Cricket"
-  },
-  {
-    id: 15,
-    src: "https://cdn.dreamdelhi.com/trending/dt1d.webp",
-    alt: "1 Day Dragon Tiger"
-  },
-  {
-    id: 16,
-    src: "https://cdn.dreamdelhi.com/trending/32c.webp",
-    alt: "20-20 Teenpatti"
-  },
-  {
-    id: 17,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-TPTT2101.webp",
-    alt: "20 20 Teenpatti 2"
-  },
-  {
-    id: 18,
-    src: "https://cdn.dreamdelhi.com/trending/32%20Cards.webp",
-    alt: "32 Cards"
-  },
-  {
-    id: 19,
-    src: "https://cdn.dreamdelhi.com/updated/MAC88-YA3101.webp",
-    alt: "Amar Akbar Anthony"
-  },
-  {
-    id: 20,
-    src: "https://cdn.uvwin2024.co/casino/trending_thumbnail/150063/dream_wheel.webp",
-    alt: "Dream Wheel"
-  },
-  {
-    id: 21,
-    src: "https://cdn.dreamdelhi.com/trending/so.webp",
-    alt: "Super Over One Day"
-  }
-];
-
+import React from "react";
+import HomeGameSection from "./HomeGameSection";
+import InoutData from "../../data/inout.json";
 
 function RecomendedGames() {
-  return (
-    <div>
-        <span className="text-[20px] lg:text-[25px] font-[900] text-[#fff] italic">
-              Recomended Games
-            </span>
-            <div className="relative mt-2 h-[2px] w-full bg-cyan-500/30">
-              {/* Highlight segment */}
-              <div className="absolute left-0 top-0 h-full w-[100px]  bg-cyan-400 rounded-full" />
-            </div>
-            <div className="flex gap-2 overflow-x-scroll scrollbar-hide mt-2">
-              {recommendedGames.map((image) => (
-                <img
-                  key={image.id}
-                  src={image.src} className="w-[100px]"/>
-              ))}
-            </div>
-    </div>
-  )
+  const games = Array.isArray(InoutData) ? InoutData : [];
+  const additionalGames = [
+    {
+      id: 13,
+      game_name: "TowerX",
+      game_uid: "5fa811450c40fda4caba581f6f10f2aa",
+      game_type: "XGames",
+      icon: "https://bulkapi.in/smart_soft/683fee631b4d58c4b7c00370_TowerX.webp",
+    },
+    {
+      id: 30,
+      game_name: "Forest Arrow",
+      game_uid: "458bd34bc83e34501df7e7f96626df6b",
+      game_type: "Instant",
+      provider: "inout",
+      icon: "https://bulkapi.in/Inout/INOUT_forest-arrow.png",
+    },
+    {
+      id: 31,
+      game_name: "Chicken Road",
+      game_uid: "2126c5c458316ba1f2df65b387b60408",
+      game_type: "Instant",
+      provider: "inout",
+      icon: "https://bulkapi.in/Inout/INOUT_chicken-road.png",
+    },
+    {
+      id: 33,
+      game_name: "Squid Gamebler",
+      game_uid: "2bd203129afe1059923b45d7bd5de143",
+      game_type: "Instant",
+      provider: "inout",
+      icon: "https://bulkapi.in/Inout/INOUT_squid-gamebler.png",
+    },
+    {
+      id: 56,
+      game_name: "Lightning Dragon Tiger",
+      game_uid: "d8da3c5c99a593a44c97325e7ba83838",
+      game_type: "CasinoLive",
+      provider: "evolutionlive",
+      icon: "https://bulkapi.in/EVO_Video/LightningDT00001.png",
+    },
+    {
+      id: 37,
+      game_name: "Dragon Tiger",
+      game_uid: "efdb52994fbfe97efcbd878dbd697ebb",
+      game_type: "CasinoLive",
+      provider: "ezugi",
+      icon: "https://bulkapi.in/EZUGI/EZUGI_150.png",
+    },
+  ];
+  const allGames = [...additionalGames, ...games];
+  return <HomeGameSection title="Recomended Games" games={allGames} />;
 }
 
-export default RecomendedGames
+export default RecomendedGames;
