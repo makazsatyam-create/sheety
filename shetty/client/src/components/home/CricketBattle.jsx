@@ -16,7 +16,7 @@ function CricketBattle() {
         <div>
           <img
             src={CricketBattleImg}
-            onClick={() => navigate("/inplay")}
+            onClick={() => navigate("/lucky")}
             alt="Cricket Battle"
             className="w-full mt-2 cursor-pointer"
           />

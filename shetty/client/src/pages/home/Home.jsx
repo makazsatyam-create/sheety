@@ -49,6 +49,7 @@ function Home() {
         <img
           src={Banner2}
           alt="Banner2"
+          onClick={() => navigate("/deposit")}
           className="w-full mt-1 rounded-sm cursor-pointer"
         />
       </div>
@@ -64,6 +65,7 @@ function Home() {
         <img
           src={Banner4}
           alt="Banner4"
+          onClick={() => navigate("/deposit")}
           className="w-full mt-1 rounded-sm cursor-pointer"
         />
       </div>
