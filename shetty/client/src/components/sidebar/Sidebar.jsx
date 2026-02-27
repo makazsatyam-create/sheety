@@ -47,7 +47,6 @@ function Sidebar({ setSidebarOpen }) {
   const otherMenu = [
     { id: 2, label: "My Bets", icon: FiBriefcase, path: "/my_bets" },
     { id: 3, label: "My Wallet", icon: FiCreditCard, path: "/my_wallet" },
-
     {
       id: 5,
       label: "Betting Profit & Loss",
@@ -66,16 +65,13 @@ function Sidebar({ setSidebarOpen }) {
       icon: FiFileText,
       path: "/account_statement",
     },
-
     {
       id: 9,
       label: "Deposit Turnover",
       icon: FiRepeat,
       path: "/deposit_turnover",
     },
-
     { id: 10, label: "My Transaction", icon: FiList, path: "/my_transaction" },
-
     { id: 18, label: "Deposit", icon: FiCreditCard, path: "/deposit" },
     { id: 19, label: "Withdraw", icon: FiCreditCard, path: "/withdraw" },
     { id: 13, label: "My Profile", icon: FiUser, path: "/my_profile" },
@@ -85,47 +81,53 @@ function Sidebar({ setSidebarOpen }) {
 
   return (
     <nav className="h-full w-full flex flex-col bg-gradient-to-b from-[#0a1a2f] to-[#0f1e34]">
-      {/* Logo Section */}
-      <div className="icon-bg-colour border-b border-[#2a3a50] shadow-lg">
-        <div className="relative flex items-center justify-center h-20 px-3">
-          {/* Desktop Logo - full width */}
+      {/* Logo Section - Fixed Layout */}
+      <div className="icon-bg-colour border-b border-[#2a3a50] shadow-lg relative">
+        <div className="flex items-center justify-center h-20 px-3 md:px-3 pr-10 md:pr-3">
+          {/* Desktop Logo */}
           <img
             src={DesktopImg}
             alt="Logo"
             className="hidden lg:block w-full h-full object-contain py-2 px-2"
           />
-          {/* Mobile Logo - full width */}
+          {/* Mobile Logo */}
           <img
             src={MobileImg}
             alt="Logo"
             className="block lg:hidden w-full h-full object-contain py-2 px-2"
           />
-          {/* Close Button */}
-          <CgCloseO
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 text-white md:hidden cursor-pointer flex-shrink-0"
-            onClick={() => setSidebarOpen(false)}
-          />
         </div>
+        {/* Close Button - Positioned absolutely on the right */}
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="absolute right-2 top-1/2 -translate-y-1/2 md:hidden z-10 p-1 rounded-full hover:bg-white/10 transition-colors"
+          aria-label="Close sidebar"
+        >
+          <CgCloseO className="w-6 h-6 text-white" />
+        </button>
       </div>
 
-      {/* Rest of the sidebar content remains the same */}
+      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto bg-white">
-        <div className="flex items-center px-6 py-3 gap-2">
-          <div className="rounded-full icon-bg-colour w-8 h-8 flex items-center justify-center text-[#fff] text-[12px] font-[600]">
+        {/* User Profile Section */}
+        <div className="flex items-center px-6 py-3 gap-2 border-b border-gray-100">
+          <div className="rounded-full bg-gradient-to-r from-[#0a1a2f] to-[#0f1e34] w-8 h-8 flex items-center justify-center text-white text-[12px] font-[600] shadow-md">
             {avatarLetter}
           </div>
-          <div className="text-[14px] font-[700] truncate">{displayName}</div>
+          <div className="text-[14px] font-[700] text-gray-800 truncate">
+            {displayName}
+          </div>
         </div>
 
-        <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span
-            className="text-xs font-bold text-black"
-            style={{ fontWeight: 700 }}
-          >
+        {/* Sports Section Header */}
+        <div className="px-4 py-2 mt-1">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
             SPORTS
           </span>
-        </button>
-        <div className="">
+        </div>
+
+        {/* Sports Menu */}
+        <div className="space-y-1">
           {sportsMenu.map((item) => {
             const isActive = item.path && location.pathname === item.path;
             return (
@@ -138,8 +140,8 @@ function Sidebar({ setSidebarOpen }) {
                     setSidebarOpen?.(false);
                   }
                 }}
-                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${
-                  isActive ? "activetab-bg" : ""
+                className={`w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
+                  isActive ? "bg-blue-50 border-l-4 border-blue-600" : ""
                 }`}
               >
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center overflow-hidden shrink-0">
@@ -163,15 +165,15 @@ function Sidebar({ setSidebarOpen }) {
           })}
         </div>
 
-        <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span
-            className="text-xs font-bold text-black"
-            style={{ fontWeight: 700 }}
-          >
+        {/* Menu Items Section Header */}
+        <div className="px-4 py-2 mt-3">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
             MENU ITEMS
           </span>
-        </button>
-        <div className="">
+        </div>
+
+        {/* Other Menu Items */}
+        <div className="space-y-1">
           {otherMenu.map((item) => {
             const Icon = item.icon;
             const isActive = item.path && location.pathname === item.path;
@@ -185,7 +187,9 @@ function Sidebar({ setSidebarOpen }) {
                     setSidebarOpen?.(false);
                   }
                 }}
-                className={`w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition ${isActive ? "activetab-bg" : ""}`}
+                className={`w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
+                  isActive ? "bg-blue-50 border-l-4 border-blue-600" : ""
+                }`}
               >
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center text-white">
                   <Icon size={14} />
@@ -193,54 +197,54 @@ function Sidebar({ setSidebarOpen }) {
                 <span className="text-xs font-[500] text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                   {item.label}
                 </span>
-                {item.arrow && <span className="text-gray-400">›</span>}
+                {item.arrow && <span className="text-gray-400 ml-auto">›</span>}
               </button>
             );
           })}
         </div>
 
-        <button className="w-full px-4 py-2 flex items-center gap-3 text-gray-400">
-          <span
-            className="text-xs font-bold text-black"
-            style={{ fontWeight: 700 }}
-          >
+        {/* Security & Logout Section Header */}
+        <div className="px-4 py-2 mt-3">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
             SECURITY & LOGOUT
           </span>
-        </button>
-        <div className="">
+        </div>
+
+        {/* Logout Button */}
+        <div className="space-y-1 mb-3">
           {securityLogout.map((item) => {
             const Icon = item.icon;
-            const isLogout = item.id === 2 && item.label === "Logout";
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => {
-                  if (isLogout) {
-                    localStorage.removeItem("auth");
-                    navigate("/login", { replace: true });
-                    setSidebarOpen?.(false);
-                  }
+                  localStorage.removeItem("auth");
+                  localStorage.removeItem("token");
+                  // Clear any other stored data
+                  navigate("/login", { replace: true });
+                  setSidebarOpen?.(false);
                 }}
-                className="w-full px-4 py-2 flex items-center gap-3 hover:bg-gray-100 transition"
+                className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 transition-colors text-red-600"
               >
                 <div className="w-6 h-6 rounded-full bg-[#0f172a] flex items-center justify-center text-white">
                   <Icon size={14} />
                 </div>
-                <span className="text-xs font-[500] text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
+                <span className="text-xs font-[500] whitespace-nowrap overflow-hidden text-ellipsis">
                   {item.label}
                 </span>
-                {item.arrow && <span className="text-gray-400">›</span>}
+                {item.arrow && <span className="text-gray-400 ml-auto">›</span>}
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="p-2">
-        <button className="w-full bg-gradient-to-r from-[#0f1e34] to-[#1a2a40] hover:from-[#1a2a40] hover:to-[#0f1e34] text-white py-3 rounded-2xl flex items-center justify-center gap-2 font-medium transition-all duration-300 border border-[#2a3a50] hover:border-[#3b82f6] group">
-          <RiWhatsappFill className="text-[#25D366] group-hover:scale-110 transition-transform duration-300" />
-          <span className="text-[10px] font-[700] tracking-wider">
+      {/* WhatsApp Button - Fixed at bottom */}
+      <div className="p-4 border-t border-[#2a3a50]">
+        <button className="w-full bg-gradient-to-r from-[#0f1e34] to-[#1a2a40] hover:from-[#1a2a40] hover:to-[#0f1e34] text-white py-3 rounded-xl flex items-center justify-center gap-2 font-medium transition-all duration-300 border border-[#2a3a50] hover:border-[#25D366] group">
+          <RiWhatsappFill className="text-[#25D366] text-xl group-hover:scale-110 transition-transform duration-300" />
+          <span className="text-xs font-[700] tracking-wider">
             FOLLOW ON WHATSAPP
           </span>
         </button>
