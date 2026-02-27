@@ -8,8 +8,10 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  Container,
 } from "@mui/material";
-import desktopLogo from "../../assets/desktopLogo.png";
+import MobileLogo from "../../assets/shetty-logo-mobile.png";
+import DesktopLogo from "../../assets/shetty-logo-desktop.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -44,7 +46,10 @@ function SignUp() {
 
   useEffect(() => {
     if (resendSecondsLeft <= 0) return;
-    const t = setInterval(() => setResendSecondsLeft((s) => (s <= 0 ? 0 : s - 1)), 1000);
+    const t = setInterval(
+      () => setResendSecondsLeft((s) => (s <= 0 ? 0 : s - 1)),
+      1000
+    );
     return () => clearInterval(t);
   }, [resendSecondsLeft]);
 
@@ -58,7 +63,8 @@ function SignUp() {
       setOtpSent(true);
       setResendSecondsLeft(RESEND_COOLDOWN_SEC);
     } catch (err) {
-      const msg = err.response?.data?.message || err.message || "Failed to send OTP";
+      const msg =
+        err.response?.data?.message || err.message || "Failed to send OTP";
       setOtpError(msg);
     } finally {
       setOtpLoading(false);
@@ -68,7 +74,13 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
-    if (!username.trim() || !password || !phone.trim() || phone.length !== 10 || !otp.trim()) {
+    if (
+      !username.trim() ||
+      !password ||
+      !phone.trim() ||
+      phone.length !== 10 ||
+      !otp.trim()
+    ) {
       setError("Please fill username, password, phone, and OTP.");
       return;
     }
@@ -83,30 +95,17 @@ function SignUp() {
       });
       navigate("/login", { replace: true });
     } catch (err) {
-      const msg = err.response?.data?.message || err.message || "Registration failed.";
+      const msg =
+        err.response?.data?.message || err.message || "Registration failed.";
       setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  const inputSx = {
-    maxWidth: "100%",
-    borderRadius: "8px",
-    border: "1px solid #04a0e2",
-    backgroundColor: "#ffffff",
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#04a0e2",
-        borderWidth: "1px",
-      },
-      boxShadow: "none",
-    },
-  };
-
   const labelSx = {
     color: subtitleColor,
-    fontSize: 16,
+    fontSize: { xs: "14px", sm: "16px" },
     fontWeight: 600,
     lineHeight: "150%",
     display: "flex",
@@ -116,149 +115,135 @@ function SignUp() {
 
   return (
     <Box
-      className="signup-ctn"
       sx={{
         background: vars.loginBackground,
+        minHeight: "100vh",
         width: "100%",
-        height: "100vh",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        overflowY: "scroll",
-        overflowX: "hidden",
-        paddingBottom: "40px",
-        fontFamily: '"Lato", sans-serif !important',
-        fontWeight: 500,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        "& div, & h1, & h2, & p, & span": {
-          fontFamily: '"Lato", sans-serif !important',
-          fontWeight: 500,
-        },
+        justifyContent: "center",
+        fontFamily: '"Lato", sans-serif',
+        py: { xs: 2, sm: 3 },
+        px: { xs: 2, sm: 0 },
       }}
     >
-      <Box
-        className="title-row"
-        sx={{
-          textAlign: "center",
-          flexShrink: 0,
-          paddingTop: "24px",
-          paddingBottom: "12px",
-        }}
-      >
-       <img src={desktopLogo} alt="shetty777.online" style={{ height: "60px", width: "auto", objectFit: "contain" }} />
-      </Box>
-
-      <Box
-        className="signup-card"
+      <Container
+        maxWidth="sm"
         sx={{
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
-          flexShrink: 0,
+          px: { xs: 0, sm: 2 },
         }}
       >
+        {/* Logo Section */}
         <Box
-          className="signup-form-page"
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            textAlign: "center",
+            mb: { xs: 2, sm: 3 },
             width: "100%",
-            maxWidth: "520px",
-            flexShrink: 0,
-            px: 1,
+          }}
+        >
+          {/* Mobile logo */}
+          <Box sx={{ display: { xs: "block", sm: "none" } }}>
+            <img
+              src={MobileLogo}
+              alt="shetty777.online"
+              style={{
+                height: "50px",
+                width: "auto",
+                objectFit: "contain",
+                margin: "0 auto",
+              }}
+            />
+          </Box>
+          {/* Desktop logo */}
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            <img
+              src={DesktopLogo}
+              alt="shetty777.online"
+              style={{
+                height: "60px",
+                width: "auto",
+                objectFit: "contain",
+                margin: "0 auto",
+              }}
+            />
+          </Box>
+        </Box>
+
+        {/* Form Card */}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "400px",
+            mx: "auto",
           }}
         >
           <Box
             component="form"
-            className="signup-form-ctn"
             autoComplete="off"
             onSubmit={handleSignUp}
             sx={{
               width: "100%",
-              maxWidth: "520px",
-              display: "flex",
-              padding: { xs: "16px 16px 24px", sm: "16px 24px 24px" },
-              flexDirection: "column",
-              background: "#071123",
+              background: vars.ionBackgroundColor,
               borderRadius: "16px 16px 0 0",
               border: `2px solid ${vars.formCtnBorder}`,
               borderBottom: "none",
-              boxSizing: "border-box",
+              p: { xs: "16px", sm: "24px" },
             }}
           >
+            {/* Back Button */}
             <Box
-              className="back-icon"
+              component="button"
+              type="button"
+              onClick={() => navigate(-1)}
               sx={{
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
+                alignItems: "center",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
                 color: white,
-                marginBottom: "8px",
+                mb: 2,
               }}
             >
-              <Box
-                component="button"
-                type="button"
-                onClick={() => navigate(-1)}
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
+              <ArrowBackIcon sx={{ fontSize: 20 }} />
+              <span
+                style={{ marginLeft: "6px", fontSize: "14px", fontWeight: 600 }}
               >
-                <ArrowBackIcon sx={{ fontSize: 22, color: "#fff" }} />
-                <span
-                  style={{
-                    marginLeft: "3px",
-                    fontSize: "14px",
-                    fontWeight: 600,
-                  }}
-                >
-                  Back
-                </span>
-              </Box>
+                Back
+              </span>
             </Box>
 
             <Typography
               sx={{
                 color: white,
-                fontSize: "32px",
+                fontSize: { xs: "28px", sm: "32px" },
                 fontWeight: 700,
-                lineHeight: "43.2px",
                 textAlign: "center",
+                mb: 1,
               }}
             >
               Sign Up
             </Typography>
+
             <Typography
               sx={{
-                fontSize: "16px",
+                fontSize: { xs: "14px", sm: "16px" },
                 fontWeight: 600,
-                lineHeight: "21.6px",
                 textAlign: "center",
                 color: subtitleColor,
-                marginTop: "4px",
-                marginBottom: "20px",
+                mb: 3,
               }}
             >
               Create your account by following these simple steps.
             </Typography>
 
             {/* Username */}
-            <Box
-              sx={{
-                display: "inline-grid",
-                width: "100%",
-                marginBottom: "10px",
-              }}
-            >
+            <Box sx={{ mb: 2.5 }}>
               <Typography sx={labelSx}>
                 Username{" "}
                 <span style={{ color: redAsterisk, marginLeft: 4 }}>*</span>
@@ -270,19 +255,27 @@ function SignUp() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 variant="outlined"
-                sx={inputSx}
-                inputProps={{ sx: { height: "48px", boxSizing: "border-box" } }}
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: white,
+                    borderRadius: "8px",
+                    border: "1px solid #04a0e2",
+                    height: { xs: "44px", sm: "48px" },
+                    "& fieldset": { border: "none" },
+                    "&:hover fieldset": { border: "none" },
+                    "&.Mui-focused fieldset": { border: "none" },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    px: { xs: 1.5, sm: 2 },
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                }}
               />
             </Box>
 
             {/* Password */}
-            <Box
-              sx={{
-                display: "inline-grid",
-                width: "100%",
-                marginBottom: "10px",
-              }}
-            >
+            <Box sx={{ mb: 2.5 }}>
               <Typography sx={labelSx}>
                 Password{" "}
                 <span style={{ color: redAsterisk, marginLeft: 4 }}>*</span>
@@ -295,40 +288,49 @@ function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 variant="outlined"
-                sx={inputSx}
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: white,
+                    borderRadius: "8px",
+                    border: "1px solid #04a0e2",
+                    height: { xs: "44px", sm: "48px" },
+                    "& fieldset": { border: "none" },
+                    "&:hover fieldset": { border: "none" },
+                    "&.Mui-focused fieldset": { border: "none" },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    px: { xs: 1.5, sm: 2 },
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => setShowPassword((p) => !p)}
+                        onClick={() => setShowPassword(!showPassword)}
                         edge="end"
+                        size="small"
                         sx={{
                           color: "#9ca3af",
-                          mr: 1,
+                          mr: 0.5,
                           "&:hover": { color: vars.formCtnBorder },
                         }}
                       >
                         {showPassword ? (
-                          <VisibilityIcon />
+                          <VisibilityIcon fontSize="small" />
                         ) : (
-                          <VisibilityOffIcon />
+                          <VisibilityOffIcon fontSize="small" />
                         )}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
-                inputProps={{ sx: { height: "48px", boxSizing: "border-box" } }}
               />
             </Box>
 
             {/* Campaign Code */}
-            <Box
-              sx={{
-                display: "inline-grid",
-                width: "100%",
-                marginBottom: "10px",
-              }}
-            >
+            <Box sx={{ mb: 2.5 }}>
               <Typography sx={labelSx}>Campaign Code</Typography>
               <TextField
                 fullWidth
@@ -336,19 +338,27 @@ function SignUp() {
                 value={campaignCode}
                 onChange={(e) => setCampaignCode(e.target.value)}
                 variant="outlined"
-                sx={inputSx}
-                inputProps={{ sx: { height: "48px", boxSizing: "border-box" } }}
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: white,
+                    borderRadius: "8px",
+                    border: "1px solid #04a0e2",
+                    height: { xs: "44px", sm: "48px" },
+                    "& fieldset": { border: "none" },
+                    "&:hover fieldset": { border: "none" },
+                    "&.Mui-focused fieldset": { border: "none" },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    px: { xs: 1.5, sm: 2 },
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
+                }}
               />
             </Box>
 
-            {/* Phone Number / WhatsApp */}
-            <Box
-              sx={{
-                display: "inline-grid",
-                width: "100%",
-                marginBottom: "16px",
-              }}
-            >
+            {/* Phone Number */}
+            <Box sx={{ mb: 2 }}>
               <Typography sx={labelSx}>
                 Phone Number / WhatsApp
                 <WhatsAppIcon
@@ -360,48 +370,67 @@ function SignUp() {
                   }}
                 />
               </Typography>
+
               <Box
                 sx={{
                   display: "flex",
                   gap: 1,
-                  alignItems: "stretch",
-                  flexWrap: "wrap",
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "center",
-                    minWidth: "72px",
-                    flexShrink: 0,
-                    height: "48px",
-                    borderRadius: "8px",
-                    border: "1px solid #04a0e2",
-                    backgroundColor: "#ffffff",
-                    padding: "0 8px",
-                    color: "#333",
-                    fontSize: 14,
+                    gap: 1,
+                    width: { xs: "100%", sm: "auto" },
                   }}
                 >
-                  <span style={{ marginRight: 4 }}>🇮🇳</span> +91
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      minWidth: { xs: "70px", sm: "80px" },
+                      height: { xs: "44px", sm: "48px" },
+                      borderRadius: "8px",
+                      border: "1px solid #04a0e2",
+                      backgroundColor: white,
+                      padding: "0 8px",
+                      color: "#333",
+                      fontSize: { xs: "14px", sm: "16px" },
+                      flex: { xs: 1, sm: "0 0 auto" },
+                    }}
+                  >
+                    <span style={{ marginRight: 4 }}>🇮🇳</span> +91
+                  </Box>
+
+                  <TextField
+                    placeholder="Phone number"
+                    value={phone}
+                    onChange={(e) =>
+                      setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                    }
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      flex: { xs: 1, sm: "1 1 120px" },
+                      "& .MuiOutlinedInput-root": {
+                        backgroundColor: white,
+                        borderRadius: "8px",
+                        border: "1px solid #04a0e2",
+                        height: { xs: "44px", sm: "48px" },
+                        "& fieldset": { border: "none" },
+                        "&:hover fieldset": { border: "none" },
+                        "&.Mui-focused fieldset": { border: "none" },
+                      },
+                      "& .MuiOutlinedInput-input": {
+                        px: { xs: 1.5, sm: 2 },
+                        fontSize: { xs: "14px", sm: "16px" },
+                      },
+                    }}
+                    inputProps={{ maxLength: 10 }}
+                  />
                 </Box>
-                <TextField
-                  placeholder="Phone number"
-                  value={phone}
-                  onChange={(e) =>
-                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
-                  }
-                  variant="outlined"
-                  sx={{
-                    flex: "1 1 120px",
-                    minWidth: 0,
-                    ...inputSx,
-                  }}
-                  inputProps={{
-                    sx: { height: "48px", boxSizing: "border-box" },
-                    maxLength: 10,
-                  }}
-                />
+
                 <Button
                   variant="contained"
                   onClick={handleSendOtp}
@@ -415,10 +444,10 @@ function SignUp() {
                     background: tealBtn,
                     color: "#fff !important",
                     borderRadius: "8px",
-                    minWidth: "120px",
-                    flexShrink: 0,
-                    height: "48px",
+                    width: { xs: "100%", sm: "120px" },
+                    height: { xs: "44px", sm: "48px" },
                     fontWeight: 600,
+                    fontSize: { xs: "14px", sm: "14px" },
                     textTransform: "none",
                     "&:hover": { background: "#007a82" },
                     "&.Mui-disabled": {
@@ -433,27 +462,24 @@ function SignUp() {
                     if (resendSecondsLeft > 0) {
                       const m = Math.floor(resendSecondsLeft / 60);
                       const s = resendSecondsLeft % 60;
-                      return `Resend in ${m}:${String(s).padStart(2, "0")}`;
+                      return `Resend ${m}:${String(s).padStart(2, "0")}`;
                     }
-                    return otpSent ? "Resend OTP" : "Send OTP";
+                    return otpSent ? "Resend" : "Send";
                   })()}
                 </Button>
               </Box>
+
               {otpError && (
-                <Typography sx={{ color: "#EF4444", fontSize: 13, marginTop: 0.5 }}>
+                <Typography
+                  sx={{ color: "#EF4444", fontSize: "13px", mt: 0.5 }}
+                >
                   {otpError}
                 </Typography>
               )}
             </Box>
 
             {/* OTP */}
-            <Box
-              sx={{
-                display: "inline-grid",
-                width: "100%",
-                marginBottom: "16px",
-              }}
-            >
+            <Box sx={{ mb: 2 }}>
               <Typography sx={labelSx}>
                 OTP <span style={{ color: redAsterisk, marginLeft: 4 }}>*</span>
               </Typography>
@@ -461,48 +487,41 @@ function SignUp() {
                 fullWidth
                 placeholder="Enter 4-digit OTP"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                onChange={(e) =>
+                  setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))
+                }
                 variant="outlined"
-                sx={inputSx}
-                inputProps={{
-                  sx: { height: "48px", boxSizing: "border-box" },
-                  maxLength: 4,
+                size="small"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    backgroundColor: white,
+                    borderRadius: "8px",
+                    border: "1px solid #04a0e2",
+                    height: { xs: "44px", sm: "48px" },
+                    "& fieldset": { border: "none" },
+                    "&:hover fieldset": { border: "none" },
+                    "&.Mui-focused fieldset": { border: "none" },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    px: { xs: 1.5, sm: 2 },
+                    fontSize: { xs: "14px", sm: "16px" },
+                  },
                 }}
+                inputProps={{ maxLength: 4 }}
               />
             </Box>
 
             {error && (
-              <Typography sx={{ color: "#EF4444", fontSize: 14, marginBottom: 1 }}>
+              <Typography
+                sx={{
+                  color: "#EF4444",
+                  fontSize: { xs: "13px", sm: "14px" },
+                  mb: 2,
+                }}
+              >
                 {error}
               </Typography>
             )}
-
-            {/* Have an account? Sign in */}
-            <Box
-              sx={{
-                textAlign: "center",
-                marginBottom: "16px",
-                fontSize: "14px",
-                color: subtitleColor,
-              }}
-            >
-              <Typography component="span" sx={{ color: subtitleColor }}>
-                Have an account?{" "}
-              </Typography>
-              <Link
-                component="button"
-                type="button"
-                onClick={() => navigate("/login")}
-                sx={{
-                  color: "#04a0e2",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                }}
-              >
-                Sign in
-              </Link>
-            </Box>
 
             {/* SIGN UP button */}
             <Button
@@ -511,17 +530,20 @@ function SignUp() {
               variant="contained"
               disabled={loading || !otp.trim()}
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                height: "44px",
-                fontSize: "16px",
-                borderRadius: "100px",
+                height: { xs: "44px", sm: "48px" },
+                fontSize: { xs: "14px", sm: "16px" },
+                borderRadius: "50px",
                 background: tealBtn,
                 color: white,
                 fontWeight: 700,
                 boxShadow: "none",
                 textTransform: "uppercase",
+                mb: 2,
                 "&:hover": { background: "#007a82" },
+                "&.Mui-disabled": {
+                  background: tealBtn,
+                  opacity: 0.7,
+                },
               }}
             >
               {loading ? (
@@ -540,11 +562,8 @@ function SignUp() {
                       },
                     }}
                   />
-                  <Typography
-                    component="span"
-                    sx={{ color: "#fff", fontSize: 14 }}
-                  >
-                    Signing up...
+                  <Typography component="span" sx={{ fontSize: "14px" }}>
+                    SIGNING UP...
                   </Typography>
                 </Box>
               ) : (
@@ -553,24 +572,25 @@ function SignUp() {
             </Button>
           </Box>
 
-          {/* Bottom bar - matches Login card foot */}
+          {/* Bottom Card Footer */}
           <Box
-            className="signup-card-footer"
             sx={{
               width: "100%",
-              maxWidth: "520px",
               background: vars.ionBackgroundColor,
-              padding: "14px 0",
               border: `2px solid ${vars.formCtnBorder}`,
-              borderTop: "1px solid #04a0e2",
-              marginTop: "-2px",
+              borderTop: `1px solid ${vars.formCtnBorder}`,
               borderRadius: "0 0 16px 16px",
+              p: { xs: 1.5, sm: 2 },
               textAlign: "center",
             }}
           >
             <Typography
               component="span"
-              sx={{ color: "#a4d4d4", fontSize: 13, fontWeight: 600 }}
+              sx={{
+                color: "#a4d4d4",
+                fontSize: { xs: "13px", sm: "14px" },
+                fontWeight: 600,
+              }}
             >
               Already have an account?{" "}
             </Typography>
@@ -579,96 +599,73 @@ function SignUp() {
               type="button"
               onClick={() => navigate("/login")}
               sx={{
-                color: "#fff",
-                marginLeft: "3px",
+                color: white,
+                fontSize: { xs: "13px", sm: "14px" },
+                fontWeight: 600,
                 textDecoration: "underline",
                 cursor: "pointer",
-                fontWeight: 600,
-                fontSize: 13,
+                background: "none",
+                border: "none",
+                "&:hover": {
+                  color: vars.formCtnBorder,
+                },
               }}
             >
               Sign in
             </Link>
           </Box>
 
-          {/* Follow on WhatsApp - footer */}
-          <Box
-            className="signup-footer-whatsapp"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: "10px",
-              width: "100%",
-            }}
-          >
+          {/* WhatsApp Channel */}
+          <Box sx={{ mt: 2, width: "100%", textAlign: "center" }}>
             <Button
               component="a"
               href="https://www.whatsapp.com/channel/0029Vb6K7XdJ93wXnxIeoW3o"
               target="_blank"
               rel="noopener noreferrer"
-              variant="text"
-              disableElevation
-              startIcon={<WhatsAppIcon sx={{ color: white, fontSize: 20 }} />}
               sx={{
-                marginBottom: "0px",
-                backgroundColor: "transparent",
-                display: "flex",
-                flexDirection: "row",
-                maxWidth: "100%",
-                border: 0,
                 color: white,
-                "&:hover": { backgroundColor: "rgba(255,255,255,0.08)" },
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                textTransform: "none",
+                "&:hover": {
+                  background: "rgba(255,255,255,0.08)",
+                },
               }}
             >
-              <span
-                style={{
-                  color: white,
-                  textTransform: "uppercase",
-                  fontSize: "10px",
-                  padding: "5px",
+              <WhatsAppIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
+              <Typography
+                sx={{
+                  fontSize: { xs: "11px", sm: "12px" },
                   fontWeight: 700,
-                  letterSpacing: "0.1em",
+                  letterSpacing: "0.5px",
                 }}
               >
                 FOLLOW ON WHATSAPP
-              </span>
+              </Typography>
             </Button>
           </Box>
 
-          {/* Disclaimer - footer */}
-          <Box
-            className="signup-disclaimer"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-              marginTop: "8px",
-            }}
-          >
+          {/* Disclaimer */}
+          <Box sx={{ mt: 2, width: "100%", px: 1 }}>
             <Typography
-              component="p"
               sx={{
                 color: "#ece7f1",
-                width: "100%",
-                maxWidth: "480px",
-                fontSize: "12px",
+                fontSize: { xs: "11px", sm: "12px" },
                 fontWeight: 600,
-                lineHeight: "17.56px",
+                lineHeight: 1.5,
                 textAlign: "center",
-                marginTop: "0px",
+                opacity: 0.8,
               }}
             >
               <strong>Disclaimer:</strong> Please note that Gambling involves a
               financial risk and could be addictive over time if not practised
               within limits. Only 18+ people should use the services and should
-              use it responsibly. Players should be aware of any financial risk
-              and govern themselves accordingly.
+              use it responsibly.
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Container>
     </Box>
   );
 }
